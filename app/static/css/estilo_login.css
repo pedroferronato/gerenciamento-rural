@@ -47,6 +47,7 @@ form {
 }
 
 input {
+    margin-top: 4px;
     border: none;
     border-bottom: 2px solid #838383;
     height: 36px;
