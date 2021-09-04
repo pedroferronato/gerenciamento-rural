@@ -47,7 +47,7 @@ def login():
         autorizado = False
 
         if produtor:
-            autorizado = bcrypt.checkpw(senha.encode('UTF-8', produtor.senha.encode('UTF-8')))
+            autorizado = bcrypt.checkpw(senha.encode('UTF-8'), produtor.senha.encode('UTF-8'))
 
         if not produtor or not autorizado:
             flash("Login não autorizado, verificar informações")

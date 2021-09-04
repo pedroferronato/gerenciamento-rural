@@ -4,9 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inicial.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.png') }}">
     <title>Gerenciamento financeiro</title>
 </head>
 <body>
-    <h1>OK</h1>
+    <div id="sidebar_box">
+        <div class="sidebar-bar">
+            <div>
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema">
+                <a href="#" id="despesas">Despesas</a>
+                <a href="#">Vendas</a>
+                <a href="#">Produções</a>
+                <a href="#">Propriedades</a>
+                <a href="#">Eventos</a>
+            </div>
+            <div>
+                <a href="{{ url_for('logout') }}" class="logout">Sair do sistema</a>
+            </div>
+        </div>
+    </div>
+    <button id="menu">
+        menu_bar
+    </button>
+
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 </body>
 </html>
