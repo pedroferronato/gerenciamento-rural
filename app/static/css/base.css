@@ -1,0 +1,46 @@
+
+:root {
+    --cinzaBackground: #F6F6F6;
+    --verde: #0FCD0B;
+}
+
+body {
+    background-color: #F6F6F6;
+    font-family: 'Roboto', sans-serif;
+}
+
+.head-bar {
+    width: 100%;
+    background-color: white;
+    height: 110px;
+
+    
+
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.06);;
+}
+
+.head-bar div {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 32px;
+    margin: 24px 16px 24px 16px;
+}
+
+span {
+    padding: 10px;
+    background-color: var(--verde);
+    border-radius: 100%;
+    color: white;
+    font-size: 40px !important;
+    margin: 24px 16px 24px 16px;
+}
