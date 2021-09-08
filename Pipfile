@@ -15,8 +15,11 @@ flask-login = "*"
 pytest = "*"
 pytest-flask = "*"
 cryptography = "*"
+flask-wtf = "*"
+email-validator = "*"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.9"
