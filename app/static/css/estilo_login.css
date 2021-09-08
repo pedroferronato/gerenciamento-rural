@@ -1,3 +1,8 @@
+:root {
+    --cinzaBackground: #F6F6F6;
+    --verde: #0FCD0B;
+}
+
 body, html {
     height: 100%;
     background-color: var(--cinzaBackground);
@@ -41,6 +46,10 @@ form {
     margin-top: 16px;
 }
 
+label {
+    font-weight: 600;
+}
+
 input {
     margin-top: 4px;
     border: none;
@@ -51,12 +60,14 @@ input {
 
 a {
     color: var(--verde);
-    margin-top: 18px;
+    margin-top: 24px;
     text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 button {
-    margin-top: 12px;
+    margin-top: 24px;
     padding: 16px 0px;
     outline: none;
     border: none;
@@ -65,4 +76,17 @@ button {
     font-size: 16px;
     font-weight: bold;
     border-radius: 3px;
+}
+
+.flashed-alert {
+    color: red;
+}
+
+.span-erro {
+    color: red;
+    margin-top: 8px;
+}
+
+.input-error {
+    border-color: red;
 }

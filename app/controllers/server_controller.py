@@ -1,3 +1,4 @@
+from app.forms.login_form import LoginForm
 from datetime import timedelta
 
 from app import application, login_manager, db
@@ -33,14 +34,10 @@ def inicial():
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
-
-    if request.method == 'GET':
-        return render_template('login.html')
-    
-    if request.method == 'POST':
-        
-        login = request.form['login']
-        senha = request.form['senha']
+    form = LoginForm()
+    if form.validate_on_submit():
+        login = form.usuario.data
+        senha = form.senha.data
 
         produtor = Produtor.query.filter_by(login=login).first()
 
@@ -55,6 +52,7 @@ def login():
         else:
             login_user(produtor, remember=False)
             return redirect(url_for('inicial'))
+    return render_template('login.html', form=form)
 
 
 @application.route('/logout')

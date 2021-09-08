@@ -16,19 +16,42 @@
     <div class="corpo">
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema">
         <form action="" method="post">
+            {{ form.hidden_tag() }}
             <div class="form-wrapper">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <span class="flashed-alert">{{ message }}</span>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 <div>
-                    <label for="login">Usuário:</label>
-                    <input type="text" name="login" id="login">
+                    {{ form.usuario.label }}
+                    {% if form.usuario.errors %}
+                        {{ form.usuario(class="input-error") }}
+                        {% for error in form.usuario.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.usuario }}
+                    {% endif %}
                 </div>
                 <div>
-                    <label for="senha">Senha:</label>
-                    <input type="password" name="senha" id="senha">
+                    {{ form.senha.label }}
+                    {% if form.senha.errors %}
+                        {{ form.senha(class="input-error") }}
+                        {% for error in form.senha.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.senha }}
+                    {% endif %}
                 </div>
-                <a href="#">Esqueceu a senha?</a>
                 <button>Entrar</button>
             </div>
         </form>
+        <a href="#">Esqueceu a senha?</a>
+        <a href="#">Criar uma nova conta</a>
     </div>
 </body>
 </html>
