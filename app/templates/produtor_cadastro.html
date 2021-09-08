@@ -1,0 +1,62 @@
+{% extends 'base_anonimo.html' %}
+
+{% block corpo %}
+<form action="{{ url_for('criarProdutor') }}" method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-wrapper">
+        <h3 class="titulo">Cadastro de conta</h3>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <span class="flashed-alert">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div>
+            {{ form.nome.label }}
+            {% if form.nome.errors %}
+                {{ form.nome(class="input-error") }}
+                {% for error in form.nome.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.nome }}
+            {% endif %}
+        </div>
+        <div>
+            {{ form.login.label }}
+            {% if form.login.errors %}
+                {{ form.login(class="input-error") }}
+                {% for error in form.login.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.login }}
+            {% endif %}
+        </div>
+        <div>
+            {{ form.senha.label }}
+            {% if form.senha.errors %}
+                {{ form.senha(class="input-error") }}
+                {% for error in form.senha.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.senha }}
+            {% endif %}
+        </div>
+        <div>
+            {{ form.confirmar_senha.label }}
+            {% if form.confirmar_senha.errors %}
+                {{ form.confirmar_senha(class="input-error") }}
+                {% for error in form.confirmar_senha.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.confirmar_senha }}
+            {% endif %}
+        </div>
+        <button>Registrar</button>
+    </div>
+</form>
+{% endblock corpo %}

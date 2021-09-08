@@ -1,57 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo_login.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo.png') }}">
-    <title>Gerenciamento financeiro</title>
-</head>
-<body>
-    <div class="corpo">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema">
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <div class="form-wrapper">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <span class="flashed-alert">{{ message }}</span>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                <div>
-                    {{ form.usuario.label }}
-                    {% if form.usuario.errors %}
-                        {{ form.usuario(class="input-error") }}
-                        {% for error in form.usuario.errors %}
-                            <span class="span-erro">{{ error }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {{ form.usuario }}
-                    {% endif %}
-                </div>
-                <div>
-                    {{ form.senha.label }}
-                    {% if form.senha.errors %}
-                        {{ form.senha(class="input-error") }}
-                        {% for error in form.senha.errors %}
-                            <span class="span-erro">{{ error }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {{ form.senha }}
-                    {% endif %}
-                </div>
-                <button>Entrar</button>
-            </div>
-        </form>
-        <a href="#">Esqueceu a senha?</a>
-        <a href="#">Criar uma nova conta</a>
+{% extends 'base_anonimo.html' %}
+
+{% block corpo %}
+<img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema">
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="form-wrapper">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <span class="flashed-alert">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div>
+            {{ form.usuario.label }}
+            {% if form.usuario.errors %}
+                {{ form.usuario(class="input-error") }}
+                {% for error in form.usuario.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.usuario }}
+            {% endif %}
+        </div>
+        <div>
+            {{ form.senha.label }}
+            {% if form.senha.errors %}
+                {{ form.senha(class="input-error") }}
+                {% for error in form.senha.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.senha }}
+            {% endif %}
+        </div>
+        <button>Entrar</button>
     </div>
-</body>
-</html>
+</form>
+<a href="#">Esqueceu a senha?</a>
+<a href="{{ url_for('criarProdutor') }}">Criar uma nova conta</a>
+{% endblock corpo %}

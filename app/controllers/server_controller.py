@@ -1,8 +1,8 @@
 from app.forms.login_form import LoginForm
 from datetime import timedelta
 
-from app import application, login_manager, db
-from flask import session, redirect, render_template, request, flash, redirect, url_for
+from app import application, login_manager
+from flask import session, redirect, render_template, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user
 import bcrypt
 

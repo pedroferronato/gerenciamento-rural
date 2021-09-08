@@ -30,3 +30,4 @@ import app.models.producao_insumo
 import app.models.movimentacao_financeira_item
 
 import app.controllers.server_controller
+import app.controllers.produtor_controller
