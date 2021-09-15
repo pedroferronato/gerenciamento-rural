@@ -6,3 +6,6 @@ class Propriedade(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     produtor_id = db.Column(db.Integer, db.ForeignKey('produtor.id'), nullable=False)
     nome = db.Column(db.String(200), nullable=False)
+    endereco = db.Column(db.String(200), nullable=False)
+    area = db.Column(db.String(20))
+    contato = db.Column(db.String(25))

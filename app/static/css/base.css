@@ -1,6 +1,7 @@
 
 :root {
     --cinzaBackground: #F6F6F6;
+    --cinzaInput: #f7f7f7;
     --verde: #0FCD0B;
 }
 
@@ -43,4 +44,126 @@ span {
     color: white;
     font-size: 40px !important;
     margin: 24px 16px 24px 16px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.cartao {
+    color: #000;
+    margin: 24px 16px 16px 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.cartao-titulo {
+    margin: 16px;
+    margin-top: 0px;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.cartao-endereco {
+    margin-left: 16px;
+    font-size: 16px;
+}
+
+.cartao-dica {
+    margin: 24px 16px 0px 16px;
+    font-size: 12px;
+    color: #5C5C5C;
+}
+
+.verde {
+    background-color: var(--verde);
+}
+
+h2.titulo {
+    font-size: 20px;
+    color: #363636;
+    margin: 24px 16px 0px 16px;
+}
+
+h3.titulo {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.botao {
+    margin: 24px 16px 0px 16px;
+    padding: 20px 0px;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.texto-botao-branco {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.formulario-interno {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 20px;
+}
+
+.form-wrapper div {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrapper div:not(:first-child) {
+    margin-top: 16px;
+}
+
+.formulario-interno label {
+    font-weight: 550;
+}
+
+.formulario-interno input {
+    margin-top: 8px;
+    border: none;
+    border-bottom: 2px solid #838383;
+    height: 36px;
+    font-size: 18px;
+    border-radius: 4px 4px 0px 0px;
+    background-color: var(--cinzaInput);
+}
+
+.formulario-interno button {
+    margin-top: 24px;
+    padding: 16px 0px;
+    outline: none;
+    border: none;
+    background-color: var(--verde);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.flashed-alert {
+    color: red;
+}
+
+.span-erro {
+    color: red;
+    margin-top: 8px;
+}
+
+.input-error {
+    border-color: red;
 }
