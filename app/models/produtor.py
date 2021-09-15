@@ -9,6 +9,7 @@ class Produtor(db.Model, UserMixin):
     nome = db.Column(db.String(200), nullable=False)
     login = db.Column(db.String(50), nullable=False, unique=True)
     senha = db.Column(db.String(150), nullable=False)
+    contato = db.Column(db.String(25))
 
 
     def is_authenticated(self):

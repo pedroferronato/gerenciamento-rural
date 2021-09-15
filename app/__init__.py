@@ -31,3 +31,4 @@ import app.models.movimentacao_financeira_item
 
 import app.controllers.server_controller
 import app.controllers.produtor_controller
+import app.controllers.propriedades_controller

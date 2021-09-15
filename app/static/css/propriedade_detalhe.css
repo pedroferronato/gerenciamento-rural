@@ -1,0 +1,26 @@
+.detalhe-label {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.detalhe-info {
+    font-weight: normal;
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.detalhe-info:last-child {
+    margin-bottom: 0px;
+}
+
+.cartao-wrap {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.detalhe-titulo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}

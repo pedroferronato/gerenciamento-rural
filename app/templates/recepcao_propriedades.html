@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Propriedades
+{% endblock titulo %}
+
+{% block corpo %}
+<a href="{{ url_for('propriedades_detalhes') }}">
+    <div class="cartao">
+        <h2 class="cartao-titulo">Chácara Trio parada dura</h2>
+        <p class="cartao-endereco">Gleba 10 - linha 15, número 452</p>
+        <p class="cartao-dica">Toque para ver mais informações</p>
+    </div>
+</a>
+<a href="{{ url_for('propriedades_cadastro') }}">
+    <div class="botao verde texto-botao-branco">
+        Cadastrar nova propriedade
+    </div>
+</a>
+{% endblock corpo %}
