@@ -9,15 +9,61 @@
 {% endblock titulo %}
 
 {% block corpo %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="flashed-alert">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="cartao">
         <div class="cartao-wrap">
-            <h3 class="detalhe-titulo">Chácara Trio parada dura</h3>
+            <h3 class="detalhe-titulo">{{ propriedade.nome }}</h3>
             <p class="detalhe-label">Endereço:</p>
-            <p class="detalhe-info">Gleba 10 - linha 15, número 452</p>
-            <p class="detalhe-label">Área:</p>
-            <p class="detalhe-info">10.000 m²</p>
-            <p class="detalhe-label">Contato:</p>
-            <p class="detalhe-info">(69) 9 9602-1323</p>
+            <p class="detalhe-info">{{ propriedade.endereco }}</p>
+            {% if propriedade.area %}
+                <p class="detalhe-label">Área:</p>
+                <p class="detalhe-info">{{ propriedade.area }}</p>
+            {% endif %}
+            {% if propriedade.contato %}
+                <p class="detalhe-label">Contato:</p>
+                <p class="detalhe-info">{{ propriedade.contato }}</p>
+            {% endif %}
         </div>
     </div>
+
+    <a href="">
+        <div class="botao azul texto-botao-branco">
+            <span class="material-icons icone-botao">bar_chart</span>
+            <p>Gráficos</p>
+        </div>
+    </a>
+
+    <a href="{{ url_for('propriedades_atualizar', propriedade_id=propriedade.id) }}">
+        <div class="botao amarelo texto-botao-cinza">
+            <span class="material-icons icone-botao texto-botao-cinza">edit</span>
+            <p>Editar</p>
+        </div>
+    </a>
+    
+    <div id="botao-deletar" class="botao vermelho texto-botao-branco">
+        <span class="material-icons icone-botao">delete</span>
+        <p>Excluir</p>
+    </div>
+
+    <div class="modal-exclusao">
+        <div class="modal-conteudo">
+            <p class="aviso-modal">Realmente deseja excluir a propriedade:</p>
+            <p class="modal-destaque">{{ propriedade.nome }}</p>
+            <a class="botao vermelho texto-botao-branco" href="{{ url_for('propriedades_excluir', propriedade_id=propriedade.id) }}">Confirmar</a>
+            <div id="btn-dismiss" class="botao cinza-claro texto-botao-cinza">
+                <p>Cancelar</p>
+            </div>
+        </div>
+    </div>
+
 {% endblock corpo %}
+
+{% block codigo %}
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+{% endblock codigo %}

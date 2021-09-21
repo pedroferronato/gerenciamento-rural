@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired, Length
+from wtforms import validators
+from wtforms.validators import DataRequired, Length, Optional
 
 
 class PropriedadeCadastroForm(FlaskForm):
@@ -10,5 +11,5 @@ class PropriedadeCadastroForm(FlaskForm):
                                             message="O nome deve ter no mínimo 6 dígitos e no máximo 70 dígitos")])
     endereco = StringField('Endereço:',
                             validators=[DataRequired(message="Insira o endereço")])
-    area = IntegerField("Área:")
+    area = IntegerField("Área:", validators=[Optional()])
     contato = StringField("Contato:")
