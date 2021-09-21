@@ -5,10 +5,10 @@
 {% endblock titulo %}
 
 {% block corpo %}
-<h2 class="titulo">Cadastrar propriedade</h2>
+<h2 class="titulo">Alterar propriedade</h2>
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('propriedades_cadastro') }}" method="post">
+    <form class="formulario-interno" action="{{ url_for('propriedades_atualizar', propriedade_id=propriedade.id) }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             {% with messages = get_flashed_messages() %}
