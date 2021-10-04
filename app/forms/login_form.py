@@ -7,4 +7,5 @@ class LoginForm(FlaskForm):
     usuario = StringField('Usuário:', 
                         validators=[DataRequired(message='Insira seu usuário')])
     senha = PasswordField('Senha:',
-                        validators=[DataRequired(message='Insira sua senha'), Length(min=3, message='Senha muito curta')])
+                        validators=[DataRequired(message='Insira sua senha'), 
+                            Length(min=3, message='Senha muito curta')])

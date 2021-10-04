@@ -1,7 +1,7 @@
 from app import db
 
 
-class Item(db.Model):
+class Producao(db.Model):
     __tablename__ = "producao"
 
     id = db.Column(db.Integer, primary_key=True)

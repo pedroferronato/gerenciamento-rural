@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grid_recepcao.css') }}">
+{% endblock estilo %}
+
+{% block titulo %}
+    Clientes
+{% endblock titulo %}
+
+{% block corpo %}
+    <div class="grid-div">
+        <a href="{{ url_for('cliente_cadastro') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">add</span>
+                <p>Adicionar</p>
+            </div>
+        </a>
+        <a href="{{ url_for('cliente_busca') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">search</span>
+                <p>Buscar</p>
+            </div>
+        </a>
+        <a href="{{ url_for('cliente_maiores') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">list_alt</span>
+                <p>Maiores consumidores</p>
+            </div>
+        </a>
+        <a href="">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">trending_up</span>
+                <p>Variação de consumo</p>
+            </div>
+        </a>
+    </div>
+{% endblock corpo %}
+
