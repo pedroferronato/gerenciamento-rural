@@ -1,7 +1,7 @@
 from app import db
 
 
-class Item(db.Model):
+class Movimentador(db.Model):
     __tablename__ = "movimentador"
 
     id = db.Column(db.Integer, primary_key=True)

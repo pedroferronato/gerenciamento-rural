@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Clientes
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Buscar cliente</h2>
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('cliente_cadastro') }}" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-wrapper">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="flashed-alert">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div>
+                {{ form.nome.label }}
+                {% if form.nome.errors %}
+                    {{ form.nome(class="input-error") }}
+                    {% for error in form.nome.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.nome }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.contato.label }}
+                {% if form.contato.errors %}
+                    {{ form.contato(class="input-error") }}
+                    {% for error in form.contato.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.contato }}
+                {% endif %}
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+
+<div class="cartao minicard">
+    <div>
+        <p class="minicard-titulo">Pedro Luís Ferronato Barreto</p>
+        <p class="minicard-subtitulo">(69) 99602-1323</p>
+    </div>
+    <div>
+        <span class="material-icons minicard-icon">description</span>
+    </div>
+</div>
+{% endblock corpo %}

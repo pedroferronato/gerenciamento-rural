@@ -7,6 +7,7 @@
     --amarelo: #ffd640;
     --vermelho: #ff4646;
     --cinzaTexto: #171717;
+    --cinzaTexto2: #363636;
     --cinzaDismiss: #dddddd;
 }
 
@@ -242,4 +243,108 @@ h3.titulo {
     font-size: 18px;
     text-align: center;
     font-weight: bold;
+}
+
+.minicard {
+    display: flex;
+    justify-content: space-between;
+}
+
+.minicard div{
+    align-self: center;
+}
+
+.minicard div:first-child{
+    margin-left: 16px;
+}
+
+.minicard div:last-child{
+    margin-right: 16px;
+}
+
+.minicard-icon {
+    font-size: 30px !important;
+    color: var(--verde);
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.minicard-titulo {
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.minicard-subtitulo {
+    font-size: 16px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -240px;
+}
+
+.footer,
+.push {
+  height: 240px;
+}
+
+.push {
+    margin-bottom: 60px;
+}
+
+.footer {
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.06);
+}
+
+.titulo-rodape {
+    font-size: 16px;
+    padding-top: 16px;
+    color: var(--cinzaTexto2);
+}
+
+.dev-rodape {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.redes-rodape {
+    margin-top: 8px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.instituto-rodape {
+    font-size: 14px;
+    margin-top: 16px;
+}
+
+.icone-rodape {
+    color: black;
+    font-size: 28px !important;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+.icone-rodape:first-child, .git-rodape {
+    margin-right: 8px;
+}
+
+.icone-rodape:last-child {
+    margin-right: 0;
+}
+
+.logo-if {
+    margin-top: 8px;
 }
