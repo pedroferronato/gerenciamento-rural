@@ -8,7 +8,7 @@
 <h2 class="titulo">Buscar cliente</h2>
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('cliente_cadastro') }}" method="post">
+    <form class="formulario-interno" action="{{ url_for('cliente_busca') }}" method="get">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             {% with messages = get_flashed_messages() %}
@@ -45,13 +45,30 @@
     </form>
 </div>
 
-<div class="cartao minicard">
-    <div>
-        <p class="minicard-titulo">Pedro Luís Ferronato Barreto</p>
-        <p class="minicard-subtitulo">(69) 99602-1323</p>
-    </div>
-    <div>
-        <span class="material-icons minicard-icon">description</span>
-    </div>
-</div>
+{% if pages %}
+    {% for resultado in pages.items %}
+        <div class="cartao minicard">
+            <div>
+                <p class="minicard-titulo">{{ resultado.nome }}</p>
+                <p class="minicard-subtitulo">{{ resultado.contato }}</p>
+            </div>
+            <div>
+                <span class="material-icons minicard-icon">description</span>
+            </div>
+        </div>
+    {% endfor %}
+    {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if pages.page == page_num %}
+                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
 {% endblock corpo %}

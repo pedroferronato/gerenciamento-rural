@@ -9,13 +9,13 @@ import bcrypt
 
 
 @application.route('/produtor/registro', methods=['GET', 'POST'])
-def criarProdutor():
+def criar_produtor():
     form = ProdutorCadastroForm()
     if form.validate_on_submit():
         verificacao_produtor = Produtor.query.filter_by(login=form.login.data).first()
         if verificacao_produtor:
             flash('Nome de usuário não pode ser utilizado, escolha outro por favor.')
-            return redirect(url_for('criarProdutor'))
+            return redirect(url_for('criar_produtor'))
         produtor = Produtor(
             nome = form.nome.data,
             login = form.login.data,
@@ -26,7 +26,7 @@ def criarProdutor():
             db.session.commit()
         except:
             flash('Falha ao se conectar ao banco de dados')
-            return redirect(url_for('criarProdutor'))
+            return redirect(url_for('criar_produtor'))
         flash(f'Usuário {form.login.data} registrado com sucesso, realize o login.')
         return redirect(url_for('login'))
     return render_template('produtor_cadastro.html', form=form)
