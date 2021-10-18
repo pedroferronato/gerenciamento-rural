@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Fornecedores
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Buscar fornecedor</h2>
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('fornecedor_busca') }}" method="get">
+        {{ form.hidden_tag() }}
+        <div class="form-wrapper">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="flashed-alert">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div>
+                {{ form.nome.label }}
+                {% if form.nome.errors %}
+                    {{ form.nome(class="input-error") }}
+                    {% for error in form.nome.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.nome }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.contato.label }}
+                {% if form.contato.errors %}
+                    {{ form.contato(class="input-error") }}
+                    {% for error in form.contato.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.contato }}
+                {% endif %}
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+
+{% if pages %}
+    {% for resultado in pages.items %}
+        <div class="cartao minicard">
+            <div>
+                <p class="minicard-titulo">{{ resultado.nome }}</p>
+                <p class="minicard-subtitulo">{{ resultado.contato }}</p>
+            </div>
+            <div>
+                <span class="material-icons minicard-icon">description</span>
+            </div>
+        </div>
+    {% endfor %}
+    {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if pages.page == page_num %}
+                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+{% endblock corpo %}
