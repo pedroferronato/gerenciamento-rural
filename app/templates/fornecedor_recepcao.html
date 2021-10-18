@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grid_recepcao.css') }}">
+{% endblock estilo %}
+
+{% block titulo %}
+    Fornecedores
+{% endblock titulo %}
+
+{% block corpo %}
+    <div class="grid-div">
+        <a href="{{ url_for('fornecedor_cadastro') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">add</span>
+                <p>Adicionar</p>
+            </div>
+        </a>
+        <a href="{{ url_for('fornecedor_busca') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">search</span>
+                <p>Buscar</p>
+            </div>
+        </a>
+        <a href="{{ url_for('fornecedor_historico') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">manage_search</span>
+                <p>Histórico de compras</p>
+            </div>
+        </a>
+        <a href="">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">trending_up</span>
+                <p>Variação de valores</p>
+            </div>
+        </a>
+    </div>
+{% endblock corpo %}
+

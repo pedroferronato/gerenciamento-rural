@@ -18,6 +18,7 @@ def cliente_cadastro():
     if form.validate_on_submit():
         verificacao_cliente = Movimentador.query.filter_by(
             nome=form.nome.data,
+            tipo="Cliente", 
             produtor_id=current_user.id
         ).first()
         if verificacao_cliente:
@@ -46,17 +47,17 @@ def cliente_cadastro():
 def cliente_busca():
     form = MovimentadorForm()
     page = request.args.get('page', 1, type=int)
-    if form.validate():
+    if form.validate_on_submit():
         filtros = []
 
         if form.contato.data:
             filtros.append(Movimentador.contato.like('%{}%'.format(form.contato.data)))
         filtros.append(Movimentador.nome.like('%{}%'.format(form.endereco.data)))
 
-        resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc()).all()
+        resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc())
 
-        if len(resultado) <= 0:
-            flash('Nenhum usuário encontrado')
+        if len(resultado.all()) <= 0:
+            flash('Nenhum cliente encontrado')
             return redirect(url_for('cliente_busca'))
 
         pages = resultado.paginate(page=page, per_page=5)
