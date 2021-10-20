@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Produções
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Produções finalizadas</h2>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="flashed-alert">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('producoes_estoque') }}" method="get">
+        {{ form.hidden_tag() }}
+        <div class="form-wrapper">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="flashed-alert">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div>
+                {{ form.nome.label }}
+                {% if form.nome.errors %}
+                    {{ form.nome(class="input-error") }}
+                    {% for error in form.nome.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.nome }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.data_comeco.label }}
+                {% if form.data_comeco.errors %}
+                    {{ form.data_comeco(class="input-error") }}
+                    {% for error in form.data_comeco.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.data_comeco }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.data_coleta.label }}
+                {% if form.data_coleta.errors %}
+                    {{ form.data_coleta(class="input-error") }}
+                    {% for error in form.data_coleta.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.data_coleta }}
+                {% endif %}
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+
+<div class="cartao minicard">
+    <div>
+        <p class="minicard-titulo">Frango</p>
+        <p class="minicard-subtitulo">Data de início: 18/10/2021</p>
+        <p class="minicard-subtitulo">Produto: Frango</p>
+    </div>
+    <div>
+        <span class="material-icons minicard-icon">description</span>
+    </div>
+</div>
+{% endblock corpo %}

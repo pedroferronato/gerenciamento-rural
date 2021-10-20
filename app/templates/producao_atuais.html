@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Produções
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Produções ativas</h2>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p class="flashed-alert">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="cartao minicard">
+    <div>
+        <p class="minicard-titulo">Frango</p>
+        <p class="minicard-subtitulo">Data de início: 18/10/2021</p>
+        <p class="minicard-subtitulo">Produto: Frango</p>
+    </div>
+    <div>
+        <span class="material-icons minicard-icon">description</span>
+    </div>
+</div>
+{% endblock corpo %}

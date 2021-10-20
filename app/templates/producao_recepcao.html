@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block estilo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grid_recepcao.css') }}">
+{% endblock estilo %}
+
+{% block titulo %}
+    Produções
+{% endblock titulo %}
+
+{% block corpo %}
+    <div class="grid-div">
+        <a href="{{ url_for('producoes_adicionar') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">add</span>
+                <p>Nova produção</p>
+            </div>
+        </a>
+        <a href="{{ url_for('producoes_atuais') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">receipt</span>
+                <p>Produções atuais</p>
+            </div>
+        </a>
+        <a href="{{ url_for('producoes_estoque') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">inventory</span>
+                <p>Estoque</p>
+            </div>
+        </a>
+        <a href="{{ url_for('producoes_finalizadas') }}">
+            <div class="grid-card">
+                <span class="material-icons grid-icons">history</span>
+                <p>Produções finalizadas</p>
+            </div>
+        </a>
+    </div>
+{% endblock corpo %}
