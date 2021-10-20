@@ -23,13 +23,15 @@ login_manager.init_app(application)
 import app.models.produtor
 import app.models.movimentador
 import app.models.propriedade
-import app.models.movimentacao_financeira
-import app.models.item
+import app.models.produto
+import app.models.insumo
 import app.models.producao
 import app.models.producao_insumo
-import app.models.movimentacao_financeira_item
+import app.models.venda
+import app.models.compra
 
 import app.controllers.server_controller
 import app.controllers.produtor_controller
 import app.controllers.propriedades_controller
 import app.controllers.cliente_controller
+import app.controllers.producao_controller

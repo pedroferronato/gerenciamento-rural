@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Produções
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Criar produção</h2>
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('cliente_cadastro') }}" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-wrapper">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="flashed-alert">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div>
+                {{ form.produto.label }}
+                {% if form.produto.errors %}
+                    {{ form.produto(class="input-error") }}
+                    {% for error in form.produto.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.produto }}
+                {% endif %}
+            </div>
+            <button id="novo_produto" class="azul texto-botao-branco botao-redirecionamento">Novo produto</button>
+            <div>
+                {{ form.nome.label }}
+                {% if form.nome.errors %}
+                    {{ form.nome(class="input-error") }}
+                    {% for error in form.nome.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.nome }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.quantidade.label }}
+                {% if form.quantidade.errors %}
+                    {{ form.quantidade(class="input-error") }}
+                    {% for error in form.quantidade.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.quantidade }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.data.label }}
+                {% if form.data.errors %}
+                    {{ form.data(class="input-error") }}
+                    {% for error in form.data.errors %}
+                        <span class="span-erro">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.data }}
+                {% endif %}
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+{% endblock corpo %}
