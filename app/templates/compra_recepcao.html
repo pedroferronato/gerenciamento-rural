@@ -5,21 +5,21 @@
 {% endblock estilo %}
 
 {% block titulo %}
-    Fornecedores
+    Despesas
 {% endblock titulo %}
 
 {% block corpo %}
     <div class="grid-div">
-        <a href="{{ url_for('fornecedor_cadastro') }}">
+        <a href="{{ url_for('despesas_compra') }}">
             <div class="grid-card">
                 <span class="material-icons grid-icons">add</span>
-                <p>Adicionar</p>
+                <p>Nova compra</p>
             </div>
         </a>
-        <a href="{{ url_for('fornecedor_busca') }}">
+        <a href="">
             <div class="grid-card">
-                <span class="material-icons grid-icons">search</span>
-                <p>Buscar</p>
+                <span class="material-icons grid-icons">money_off</span>
+                <p>Despesas por acidente</p>
             </div>
         </a>
         <a href="">
@@ -30,8 +30,8 @@
         </a>
         <a href="">
             <div class="grid-card">
-                <span class="material-icons grid-icons">trending_up</span>
-                <p>Variação de valores</p>
+                <span class="material-icons grid-icons">bar_chart</span>
+                <p>Despesas por mês</p>
             </div>
         </a>
     </div>

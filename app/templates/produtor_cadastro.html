@@ -1,7 +1,7 @@
 {% extends 'base_anonimo.html' %}
 
 {% block corpo %}
-<form action="{{ url_for('criarProdutor') }}" method="post">
+<form action="{{ url_for('criar_produtor') }}" method="post">
     {{ form.hidden_tag() }}
     <div class="form-wrapper">
         <h3 class="titulo">Cadastro de conta</h3>
@@ -32,6 +32,17 @@
                 {% endfor %}
             {% else %}
                 {{ form.login }}
+            {% endif %}
+        </div>
+        <div>
+            {{ form.contato.label }}
+            {% if form.contato.errors %}
+                {{ form.contato(class="input-error") }}
+                {% for error in form.contato.errors %}
+                    <span class="span-erro">{{ error }}</span>
+                {% endfor %}
+            {% else %}
+                {{ form.contato }}
             {% endif %}
         </div>
         <div>

@@ -35,3 +35,5 @@ import app.controllers.produtor_controller
 import app.controllers.propriedades_controller
 import app.controllers.cliente_controller
 import app.controllers.producao_controller
+import app.controllers.fornecedor_controller
+import app.controllers.despesas_controller

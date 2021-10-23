@@ -1,4 +1,3 @@
-from app.controllers.server_controller import login
 from app.models.movimentador import Movimentador
 from app.forms.movimentador_form import MovimentadorForm
 from app import db, application
@@ -8,11 +7,11 @@ from flask import render_template, redirect, url_for, flash, request
 
 @application.route('/fornecedor')
 @login_required
-def fornecedor_recepcao():
+def fornecedor():
     return render_template('fornecedor_recepcao.html')
 
 
-@application.route('/fornecedor/cadastro')
+@application.route('/fornecedor/cadastro', methods=['GET', 'POST'])
 @login_required
 def fornecedor_cadastro():
     form = MovimentadorForm()
@@ -39,33 +38,42 @@ def fornecedor_cadastro():
             flash("Falha ao cadastrar fornecedor")
             return redirect(url_for('fornecedor_cadastro'))
         flash(f'Fornecedor {form.nome.data} registrado com sucesso')
-        return redirect(url_for('fornecedor_recepcao'))
-    return render_template('fornecedor_cadastro.html', form=form)
+        return redirect(url_for('fornecedor'))
+    return render_template('fornecedor_cadastro.html', form=form, botao="Cadastrar fornecedor")
 
 
 @application.route('/fornecedor/busca')
 @login_required
 def fornecedor_busca():
-    form = MovimentadorForm()
+    return render_template('fornecedor_busca.html', botao="Buscar fornecedor")
+
+
+@application.route('/fornecedor/busca/resultado')
+@login_required
+def fornecedor_busca_resultado():
     page = request.args.get('page', 1, type=int)
-    if form.validate_on_submit():
-        filtros = []
+    nome = request.args.get('nome', '')
+    contato = request.args.get('contato', '')
+    filtros = [
+        Movimentador.tipo == "Fornecedor"
+    ]
+    if not nome and not contato:
+        flash('Insira pelo menos uma informação para a busca')
+        return redirect(url_for('fornecedor_busca'))
 
-        if form.contato.data:
-            filtros.append(Movimentador.contato.like('%{}%'.format(form.contato.data)))
-        filtros.append(Movimentador.nome.like('%{}%'.format(form.endereco.data)))
+    if nome:
+        filtros.append(Movimentador.nome.like('%{}%'.format(nome)))
+    if contato:
+        filtros.append(Movimentador.contato.like('%{}%'.format(contato)))
 
-        resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc())
+    resultado = Movimentador.query.filter(*filtros).order_by(Movimentador.nome.asc())
 
-        if len(resultado.all()) <= 0:
-            flash('Nenhum fornecedor encontrado')
-            return redirect(url_for('fornecedor_busca'))
+    if len(resultado.all()) <= 0:
+        flash('Nenhum fornecedor encontrado')
+        return redirect(url_for('fornecedor_busca'))
 
-        pages = resultado.paginate(page=page, per_page=5)
+    if len(resultado.all()) < 10:
+        return render_template('fornecedor_busca.html', botao="Buscar fornecedor", fornecedores=resultado.all())
 
-        return render_template('fornecedor_busca.html', form=form, botao="Buscar fornecedor", pages=pages)
-
-    return render_template('fornecedor_busca.html', form=form, botao="Buscar fornecedor")
-
-
-
+    pages = resultado.paginate(page=page, per_page=5)
+    return render_template('fornecedor_busca.html', botao="Buscar fornecedor", pages=pages)
