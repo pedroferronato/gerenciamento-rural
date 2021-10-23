@@ -168,6 +168,10 @@ h3.titulo {
     background-color: var(--cinzaInput);
 }
 
+.formulario-interno input {
+    padding-left: 8px;
+}
+
 .formulario-interno button {
     margin-top: 24px;
     padding: 16px 0px;

@@ -8,8 +8,7 @@
 <h2 class="titulo">Buscar fornecedor</h2>
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('fornecedor_busca') }}" method="get">
-        {{ form.hidden_tag() }}
+    <form class="formulario-interno" action="{{ url_for('fornecedor_busca_resultado') }}" method="get">
         <div class="form-wrapper">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -19,31 +18,31 @@
                 {% endif %}
             {% endwith %}
             <div>
-                {{ form.nome.label }}
-                {% if form.nome.errors %}
-                    {{ form.nome(class="input-error") }}
-                    {% for error in form.nome.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.nome }}
-                {% endif %}
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="nome" autocomplete="off">
             </div>
             <div>
-                {{ form.contato.label }}
-                {% if form.contato.errors %}
-                    {{ form.contato(class="input-error") }}
-                    {% for error in form.contato.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.contato }}
-                {% endif %}
+                <label for="contato">Contato</label>
+                <input type="text" name="contato" id="contato" autocomplete="off">
             </div>
             <button>{{ botao }}</button>
         </div>
     </form>
 </div>
+
+{% if fornecedores %}
+    {% for fornecedor in fornecedores %}
+    <div class="cartao minicard">
+        <div>
+            <p class="minicard-titulo">{{ fornecedor.nome }}</p>
+            <p class="minicard-subtitulo">{{ fornecedor.contato }}</p>
+        </div>
+        <div>
+            <span class="material-icons minicard-icon">description</span>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
 
 {% if pages %}
     {% for resultado in pages.items %}

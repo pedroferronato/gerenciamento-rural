@@ -19,6 +19,7 @@ def criar_produtor():
         produtor = Produtor(
             nome = form.nome.data,
             login = form.login.data,
+            contato = form.contato.data,
             senha = bcrypt.hashpw(form.senha.data.encode('utf-8'), bcrypt.gensalt())
         )
         try:
