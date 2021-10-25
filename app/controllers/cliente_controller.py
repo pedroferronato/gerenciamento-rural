@@ -22,7 +22,7 @@ def cliente_cadastro():
             produtor_id=current_user.id
         ).first()
         if verificacao_cliente:
-            flash("Você já cadastrou esse cliente")
+            flash("Você já cadastrou esse cliente", 'flash-alerta')
             return redirect(url_for('cliente_cadastro'))
         cliente = Movimentador(
             produtor_id=current_user.id,
@@ -35,9 +35,9 @@ def cliente_cadastro():
             db.session.add(cliente)
             db.session.commit()
         except:
-            flash("Falha ao cadastrar cliente")
+            flash("Falha ao cadastrar cliente", 'flash-falha')
             return redirect(url_for("cliente_cadastro"))
-        flash(f'Cliente {form.nome.data} registrado com sucesso')
+        flash(f'Cliente {form.nome.data} registrado com sucesso', 'flash-sucesso')
         return redirect(url_for('cliente'))
     return render_template('cliente_cadastro.html', form=form, botao="Cadastrar novo cliente")
 
@@ -57,7 +57,7 @@ def cliente_busca():
         resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc())
 
         if len(resultado.all()) <= 0:
-            flash('Nenhum cliente encontrado')
+            flash('Nenhum cliente encontrado', 'flash-alerta')
             return redirect(url_for('cliente_busca'))
 
         pages = resultado.paginate(page=page, per_page=5)

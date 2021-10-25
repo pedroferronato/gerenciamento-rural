@@ -28,7 +28,7 @@ def propriedades_cadastro():
         verificacao_propriedade_produtor = Propriedade.query.filter(*filtros).first()
 
         if verificacao_propriedade_produtor:
-            flash('Você já registrou esta propriedade')
+            flash('Você já registrou esta propriedade', 'flash-alerta')
             return redirect(url_for('propriedades_cadastro'))
 
         if not form.contato.data:
@@ -46,7 +46,7 @@ def propriedades_cadastro():
             db.session.add(nova_propriedade)
             db.session.commit()
         except:
-            flash('Falha ao salvar no banco de dados')
+            flash('Falha ao salvar no banco de dados', 'flash-falha')
             return redirect(url_for('propriedades_cadastro'))
         
         return redirect(url_for('propriedades'))
@@ -85,9 +85,9 @@ def propriedades_atualizar(propriedade_id):
                 db.session.add(propriedade)
                 db.session.commit()
             except Exception as ex:
-                flash('Falha ao alterar no banco de dados')
+                flash('Falha ao alterar no banco de dados', 'flash-falha')
                 return redirect(url_for('propriedades_atualizar', propriedade_id=propriedade_id))
-            flash('Propriedade atualizada com sucesso')
+            flash('Propriedade atualizada com sucesso', 'flash-sucesso')
             return redirect(url_for('propriedades_detalhes', propriedade_id=propriedade_id))
 
     return render_template('propriedade_editar.html', form=form, propriedade=propriedade, botao="Atualizar")
@@ -101,7 +101,7 @@ def propriedades_excluir(propriedade_id):
         db.session.delete(propriedade)
         db.session.commit()
     except:
-        flash("Falha ao excluir da base de dados")
+        flash("Falha ao excluir da base de dados", 'flash-falha')
         return redirect(url_for('propriedades_detalhes', propriedade_id=propriedade_id))
-    flash("Propriedade removida com sucesso")
+    flash("Propriedade removida com sucesso", 'flash-sucesso')
     return redirect(url_for('propriedades'))

@@ -5,13 +5,15 @@ Propriedades
 {% endblock titulo %}
 
 {% block corpo %}
-    {% with messages = get_flashed_messages() %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            {% for message in messages %}
-                <p class="flashed-alert">{{ message }}</p>
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
             {% endfor %}
         {% endif %}
     {% endwith %}
+
     {% if propriedades %}
         {% for propriedade in propriedades %}    
             <a href="{{ url_for('propriedades_detalhes', propriedade_id=propriedade.id) }}">
@@ -25,9 +27,10 @@ Propriedades
     {% else %}
         <div class="aviso-nulo">Nenhuma propriedade registrada no momento</div>
     {% endif %}
-<a href="{{ url_for('propriedades_cadastro') }}">
-    <div class="botao verde texto-botao-branco">
-        Cadastrar nova propriedade
-    </div>
-</a>
+
+    <a href="{{ url_for('propriedades_cadastro') }}">
+        <div class="botao verde texto-botao-branco">
+            Cadastrar nova propriedade
+        </div>
+    </a>
 {% endblock corpo %}

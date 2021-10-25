@@ -1,4 +1,5 @@
 from app import db
+import math
 
 
 class Insumo(db.Model):
@@ -14,3 +15,23 @@ class Insumo(db.Model):
     valor_total = db.Column(db.Float)
     utilidade = db.Column(db.String(100), nullable=False)
     unidade_medida = db.Column(db.String(50))
+
+
+    def valor_final_formatado(self):
+        return 'R$ {:.2f}'.format(self.valor_total)
+
+
+    def valor_unitario_formatado(self):
+        return 'R$ {:.2f}'.format(self.valor_unitario)
+
+
+    def quantidade_estocada_formatada(self):
+        if self.quantidade_estocada.is_integer():
+            return "{} {}".format(int(self.quantidade_estocada), self.unidade_medida)
+        return "{} {}".format(self.quantidade_estocada, self.unidade_medida)
+
+
+    def quantidade_formatada(self):
+        if self.quantidade.is_integer():
+            return "{} {}".format(int(self.quantidade), self.unidade_medida)
+        return "{} {}".format(self.quantidade, self.unidade_medida)

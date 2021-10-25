@@ -14,7 +14,7 @@ def criar_produtor():
     if form.validate_on_submit():
         verificacao_produtor = Produtor.query.filter_by(login=form.login.data).first()
         if verificacao_produtor:
-            flash('Nome de usuário não pode ser utilizado, escolha outro por favor.')
+            flash('Nome de usuário não pode ser utilizado, tente escolher outro.', 'flash-alerta')
             return redirect(url_for('criar_produtor'))
         produtor = Produtor(
             nome = form.nome.data,
@@ -26,8 +26,8 @@ def criar_produtor():
             db.session.add(produtor)
             db.session.commit()
         except:
-            flash('Falha ao se conectar ao banco de dados')
+            flash('Falha ao se conectar ao banco de dados', 'flash-falha')
             return redirect(url_for('criar_produtor'))
-        flash(f'Usuário {form.login.data} registrado com sucesso, realize o login.')
+        flash(f'Usuário {form.login.data} registrado com sucesso, realize o login.', 'flash-sucesso')
         return redirect(url_for('login'))
     return render_template('produtor_cadastro.html', form=form)
