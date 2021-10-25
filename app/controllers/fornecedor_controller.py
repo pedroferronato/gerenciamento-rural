@@ -22,7 +22,7 @@ def fornecedor_cadastro():
             produtor_id=current_user.id
         ).first()
         if verificacao_fornecedor:
-            flash('Você já cadastrou um fornecedor com este nome')
+            flash('Você já cadastrou um fornecedor com este nome', 'flash-alerta')
             return redirect(url_for('fornecedor_cadastro'))
         fornecedor = Movimentador(
             produtor_id=current_user.id,
@@ -35,9 +35,9 @@ def fornecedor_cadastro():
             db.session.add(fornecedor)
             db.session.commit()
         except:
-            flash("Falha ao cadastrar fornecedor")
+            flash("Falha ao cadastrar fornecedor", 'flash-falha')
             return redirect(url_for('fornecedor_cadastro'))
-        flash(f'Fornecedor {form.nome.data} registrado com sucesso')
+        flash(f'Fornecedor {form.nome.data} registrado com sucesso', 'flash-sucesso')
         return redirect(url_for('fornecedor'))
     return render_template('fornecedor_cadastro.html', form=form, botao="Cadastrar fornecedor")
 
@@ -58,7 +58,7 @@ def fornecedor_busca_resultado():
         Movimentador.tipo == "Fornecedor"
     ]
     if not nome and not contato:
-        flash('Insira pelo menos uma informação para a busca')
+        flash('Insira pelo menos uma informação para a busca', 'flash-alerta')
         return redirect(url_for('fornecedor_busca'))
 
     if nome:
@@ -69,7 +69,7 @@ def fornecedor_busca_resultado():
     resultado = Movimentador.query.filter(*filtros).order_by(Movimentador.nome.asc())
 
     if len(resultado.all()) <= 0:
-        flash('Nenhum fornecedor encontrado')
+        flash('Nenhum fornecedor encontrado', 'flash-alerta')
         return redirect(url_for('fornecedor_busca'))
 
     if len(resultado.all()) < 10:

@@ -31,7 +31,7 @@ def producoes_atuais():
     producoes = Producao.query.filter(*filtros).order_by(Producao.data.asc())
 
     if len(producoes.all()) == 0:
-        flash('Nenhuma produção ativa encontrada')
+        flash('Nenhuma produção ativa encontrada', 'flash-alerta')
         return render_template('producao_atuais.html')
 
     if len(producoes.all()) > 10:
@@ -65,7 +65,7 @@ def producoes_estoque():
     produtos_em_estoque = Produto.query.filter(*filtros).order_by(Produto.quantidade.asc())
 
     if len(produtos_em_estoque.all()) == 0:
-        flash('Nenhuma produção ativa encontrada')
+        flash('Nenhuma produção ativa encontrada', 'flash-alerta')
         return render_template('producao_estoque.html', form=form)
 
     if len(produtos_em_estoque.all()) > 10:
@@ -102,7 +102,7 @@ def producoes_finalizadas():
     producoes = Producao.query.filter(*filtros).order_by(Producao.data.asc())
 
     if len(producoes.all()) == 0:
-        flash('Nenhuma produção finalizada encontrada')
+        flash('Nenhuma produção finalizada encontrada', 'flash-alerta')
         return render_template('producao_finalizadas.html')
 
     if len(producoes.all()) > 10:
@@ -128,11 +128,11 @@ def producoes_adicionar():
     if form.validate_on_submit():
         propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
         if not propriedade:
-            flash("Você precisa cadastrar sua propriedade para registrar produções")
+            flash("Você precisa cadastrar sua propriedade para registrar produções", 'flash-alerta')
             return redirect(url_for('producoes_adicionar'))
 
         if form.data.data < datetime.date(2018, 1, 1):
-            flash("Você está inserindo uma prodção muito antiga")
+            flash("Você está inserindo uma prodção muito antiga", 'flash-alerta')
             return redirect(url_for('producoes_adicionar'))
         
         producao = Producao(
@@ -155,8 +155,8 @@ def producoes_adicionar():
             db.session.add(insumo_base)
             db.session.commit()
         except:
-            flash("Falha ao criar produção")
+            flash("Falha ao criar produção", 'flash-falha')
             return redirect(url_for('producoes_adicionar'))
-        flash("Produção criada com sucesso")
+        flash("Produção criada com sucesso", 'falha-sucesso')
         return redirect(url_for("producoes_atuais"))
     return render_template('producao_cadastro.html', form=form, botao="Criar produção")

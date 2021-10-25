@@ -5,10 +5,10 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <div class="form-wrapper">
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for message in messages %}
-                    <span class="flashed-alert">{{ message }}</span>
+                {% for category, message in messages %}
+                    <p class="flashed-alert {{ category }}">{{ message }}</p>
                 {% endfor %}
             {% endif %}
         {% endwith %}

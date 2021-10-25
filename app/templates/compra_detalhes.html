@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Compras
+{% endblock titulo %}
+
+{% block corpo %}
+    {% if compra %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">{{ compra.get_insumo().nome }}</p>
+
+            <div class="detalhes-flex">
+                <div>
+                    <label>Fornecido por:</label>
+                    <p class="detalhes-informacoes">{{ compra.get_fornecedor().nome }}</p>
+                </div>
+                <div>
+                    <label>Data de compra:</label>
+                    <p class="detalhes-informacoes">{{ compra.data.strftime('%d/%m/%Y') }}</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Pagamento</p>
+
+            <label>Quantidade:</label>
+            <p class="detalhes-informacoes">{{ compra.get_insumo().quantidade_formatada() }}</p>
+
+            <label>Valor unitário:</label>
+            <p class="detalhes-informacoes">{{ compra.get_insumo().valor_unitario_formatado() }}</p>
+
+            {% if compra.desconto %}
+                <label>Desconto:</label>
+                <p class="detalhes-informacoes">{{ compra.desconto }}</p>
+            {% endif %}
+
+            <label>Valor final:</label>
+            <p class="detalhes-informacoes">{{ compra.get_insumo().valor_final_formatado() }}</p>
+        </div>
+
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Estoque</p>
+            
+            <label>Quantidade em estoque:</label>
+            <p class="detalhes-informacoes">{{ compra.get_insumo().quantidade_estocada_formatada() }}</p>
+        </div>
+
+    {% else %}
+        <div class="cartao">
+            <p class="detalhes-titulo">Compra não encontrada</p>
+        </div>
+    {% endif %}
+{% endblock corpo %}

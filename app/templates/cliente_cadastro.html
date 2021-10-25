@@ -7,17 +7,18 @@
 {% block corpo %}
 <h2 class="titulo">Cadastrar cliente</h2>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <p class="flashed-alert {{ category }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 <div class="cartao">
     <form class="formulario-interno" action="{{ url_for('cliente_cadastro') }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <p class="flashed-alert">{{ message }}</p>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
             <div>
                 {{ form.nome.label }}
                 {% if form.nome.errors %}

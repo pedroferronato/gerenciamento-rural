@@ -1,9 +1,9 @@
-from datetime import date
-import app
-from app.controllers.fornecedor_controller import fornecedor
+from datetime import date, datetime
 from app.models.compra import Compra
 from app.forms.compra_form import CompraForm
+from app.forms.compra_historico_form import CompraHistoricoForm
 from app import db, application
+from sqlalchemy import and_
 from flask_login import login_required, current_user
 from flask import render_template, redirect, url_for, flash, request
 
@@ -35,23 +35,23 @@ def despesas_compra():
     if form.validate_on_submit():
         propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
         if not propriedade:
-            flash("Você precisa cadastrar sua propriedade para registrar compras")
+            flash("Você precisa cadastrar sua propriedade para registrar compras", 'flash-alerta')
             return redirect(url_for('despesas_compra'))
         
         finalidade = dict(finalidades).get(int(form.finalidade.data))
 
         if not finalidade in [f for (i, f) in finalidades]:
-            flash("Insira apenas as funcionalidades originais")
+            flash("Insira apenas as funcionalidades originais", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
         fornecedor = dict(fornecedores_escolhas).get(int(form.fornecedor.data))
 
         if not fornecedor in [f for (i, f) in fornecedores_escolhas]:
-            flash("Insira apenas as funcionalidades originais")
+            flash("Insira apenas as funcionalidades originais", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
         if form.data.data < date(2010, 1, 1):
-            flash("Data muito antiga")
+            flash("Data muito antiga", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
         insumo = Insumo(
@@ -61,7 +61,7 @@ def despesas_compra():
             quantidade = form.quantidade.data,
             quantidade_estocada = form.quantidade.data,
             valor_unitario = form.valor_unitario.data,
-            valor_total = form.valor_unitario.data,
+            valor_total = form.valor_total.data,
             utilidade = finalidade,
             unidade_medida = form.unidade.data
         )
@@ -81,7 +81,78 @@ def despesas_compra():
             db.session.commit()
         except Exception as e:
             print(e)
-            flash('Falha ao registrar compra, provável falha ao conectar ao banco de dados')
+            flash('Falha ao registrar compra, falha ao conectar ao banco de dados', 'flash-falha')
             return redirect(url_for('despesas_compra'))
         
+        flash('Compra registrada com sucesso', 'flash-sucesso')
+        return redirect(url_for('despesa'))
+        
     return render_template('compra_adicionar.html', form=form, botao="Registrar compra")
+
+
+def setup_formulario_buscar():
+    fornecedores = Movimentador.query.filter_by(produtor_id=current_user.id, tipo="Fornecedor").all()
+    selecione = [(0, "Selecione")]
+    return selecione + [(fornecedor.id, fornecedor.nome) for fornecedor in fornecedores]
+
+@application.route('/despesas/compra/historico')
+@login_required
+def despesas_compra_historico():
+    form = CompraHistoricoForm()
+    form.fornecedor.choices = setup_formulario_buscar()
+    return render_template('compras_historico.html', form=form, botao="Buscar no histórico")
+
+
+@application.route('/despesas/compra/historico/resultado')
+@login_required
+def despesas_compra_historico_resultado():
+    form = CompraHistoricoForm()
+    form.fornecedor.choices = setup_formulario_buscar()
+
+    data_inicio = request.args.get('data_inicio')
+    data_final = request.args.get('data_final')
+    fornecedor = request.args.get('fornecedor', type=int)
+
+    page = request.args.get('page', 1, type=int)
+
+    filtros = []
+
+    if fornecedor != 0 and fornecedor:
+        filtros.append(Compra.movimentador_id == fornecedor)
+
+    if data_inicio and not data_final :
+        data = datetime.strptime(str(data_inicio), "%d/%m/%Y").date()
+        filtros.append(Compra.data == data)
+
+    if data_final and not data_inicio:
+        data = datetime.strptime(str(data_final), "%d/%m/%Y").date()
+        filtros.append(Compra.data == data)
+
+    if data_final and data_inicio:
+        data_inicial = datetime.strptime(str(data_inicio), "%d/%m/%Y").date()
+        data_fim = datetime.strptime(str(data_final), "%d/%m/%Y").date()
+        filtros.append(and_(Compra.data >= data_inicial, Compra.data <= data_fim))
+
+    if len(filtros) <= 0:
+        flash('Insira valores para a busca', 'flash-alerta')
+        return redirect(url_for('despesas_compra_historico'))
+
+    compras = Compra.query.filter(*filtros).order_by(Compra.data.desc())
+
+    if len(compras.all()) <= 0:
+        flash('Nenhuma compra encontrada', 'flash-alerta')
+        return redirect(url_for('despesas_compra_historico'))
+
+    if len(compras.all()) <= 10:
+        return render_template('compras_historico.html', form=form, botao="Buscar no histórico", compras=compras.all())
+
+    pages = compras.paginate(page=page, per_page=5)
+
+    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", pages=pages)
+
+
+@application.route('/compra/<compra_id>')
+@login_required
+def compra_detalhe(compra_id):
+    compra = Compra.query.filter_by(id=compra_id).first()
+    return render_template('compra_detalhes.html', compra=compra)
