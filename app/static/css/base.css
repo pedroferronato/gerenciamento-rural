@@ -158,6 +158,10 @@ h3.titulo {
     font-weight: 550;
 }
 
+input::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
 .formulario-interno input, .formulario-interno select {
     margin-top: 8px;
     border: none;
