@@ -44,10 +44,16 @@ def despesas_compra():
             flash("Insira apenas as funcionalidades originais", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
-        fornecedor = dict(fornecedores_escolhas).get(int(form.fornecedor.data))
-
-        if not fornecedor in [f for (i, f) in fornecedores_escolhas]:
-            flash("Insira apenas as funcionalidades originais", 'flash-falha')
+        fornecedor_selecionado = request.form['data-fornecedor']
+        filtros = [
+            Movimentador.tipo == "Fornecedor",
+            Movimentador.nome == fornecedor_selecionado,
+            Movimentador.produtor_id == current_user.id
+        ]
+        fornecedor_id = Movimentador.query.filter(*filtros).first().id
+        
+        if not fornecedor_id:
+            flash("Fornecedor não encontrado", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
         if form.data.data < date(2010, 1, 1):
@@ -55,7 +61,7 @@ def despesas_compra():
             return redirect(url_for('despesas_compra'))
 
         insumo = Insumo(
-            fornecedor_id = int(form.fornecedor.data),
+            fornecedor_id = fornecedor_id,
             propriedade_id = propriedade.id,
             nome = form.insumo.data,
             quantidade = form.quantidade.data,
@@ -74,7 +80,7 @@ def despesas_compra():
                 propriedade_id = propriedade.id,
                 data = form.data.data,
                 insumo_id = insumo.id,
-                movimentador_id = int(form.fornecedor.data),
+                movimentador_id = fornecedor_id,
                 desconto = form.desconto.data
             )
             db.session.add(compra)
@@ -87,31 +93,34 @@ def despesas_compra():
         flash('Compra registrada com sucesso', 'flash-sucesso')
         return redirect(url_for('despesa'))
         
-    return render_template('compra_adicionar.html', form=form, botao="Registrar compra")
+    return render_template('compra_adicionar.html', form=form, botao="Registrar compra", fornecedores=fornecedores)
 
 
 def setup_formulario_buscar():
-    fornecedores = Movimentador.query.filter_by(produtor_id=current_user.id, tipo="Fornecedor").all()
-    selecione = [(0, "Selecione")]
-    return selecione + [(fornecedor.id, fornecedor.nome) for fornecedor in fornecedores]
+    return Movimentador.query.filter_by(produtor_id=current_user.id, tipo="Fornecedor").all()
+
 
 @application.route('/despesas/compra/historico')
 @login_required
 def despesas_compra_historico():
     form = CompraHistoricoForm()
-    form.fornecedor.choices = setup_formulario_buscar()
-    return render_template('compras_historico.html', form=form, botao="Buscar no histórico")
+    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", fornecedores=setup_formulario_buscar())
 
 
 @application.route('/despesas/compra/historico/resultado')
 @login_required
 def despesas_compra_historico_resultado():
     form = CompraHistoricoForm()
-    form.fornecedor.choices = setup_formulario_buscar()
 
     data_inicio = request.args.get('data_inicio')
     data_final = request.args.get('data_final')
-    fornecedor = request.args.get('fornecedor', type=int)
+    fornecedor = request.args.get('data-fornecedor')
+    filtros_forn = [
+            Movimentador.tipo == "Fornecedor",
+            Movimentador.nome == fornecedor ,
+            Movimentador.produtor_id == current_user.id
+        ]
+    fornecedor = Movimentador.query.filter(*filtros_forn).first().id
 
     page = request.args.get('page', 1, type=int)
 
@@ -144,11 +153,11 @@ def despesas_compra_historico_resultado():
         return redirect(url_for('despesas_compra_historico'))
 
     if len(compras.all()) <= 10:
-        return render_template('compras_historico.html', form=form, botao="Buscar no histórico", compras=compras.all())
+        return render_template('compras_historico.html', form=form, botao="Buscar no histórico", compras=compras.all(), fornecedores=setup_formulario_buscar())
 
     pages = compras.paginate(page=page, per_page=5)
 
-    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", pages=pages)
+    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", pages=pages, fornecedores=setup_formulario_buscar())
 
 
 @application.route('/compra/<compra_id>')

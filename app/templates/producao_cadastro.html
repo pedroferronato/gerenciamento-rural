@@ -20,17 +20,15 @@
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             <div>
-                {{ form.produto.label }}
-                {% if form.produto.errors %}
-                    {{ form.produto(class="input-error") }}
-                    {% for error in form.produto.errors %}
-                        <span class="span-erro">{{ error }}</span>
+                <label for="data-insumo">Produto:</label>
+                <input autocomplete="off" name="data-insumo" id="data-insumo" list="produto" 
+                placeholder="Busque aqui">
+                <datalist name="produto" id="produto">
+                    {% for produto in insumos %}
+                        <option value="{{ produto.nome }}"></option>
                     {% endfor %}
-                {% else %}
-                    {{ form.produto }}
-                {% endif %}
+                </datalist>
             </div>
-            <button id="novo_produto" class="azul texto-botao-branco botao-redirecionamento">Novo produto</button>
             <div>
                 {{ form.nome.label }}
                 {% if form.nome.errors %}

@@ -1,4 +1,6 @@
 import datetime
+
+from sqlalchemy.sql.operators import isnot_distinct_from
 from app import application, db
 from app.forms.producao_form import ProducaoForm
 from app.forms.estoque_form import EstoqueForm
@@ -117,24 +119,34 @@ def producoes_finalizadas():
 @application.route('/producao/adicionar', methods=['GET', 'POST'])
 @login_required
 def producoes_adicionar():
+    propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
+    if not propriedade:
+        flash("Você precisa cadastrar sua propriedade para registrar produções", 'flash-alerta')
+        return redirect(url_for('producoes_adicionar'))
+
     form = ProducaoForm()
     filtros = [
         Insumo.utilidade == "Criação",
-        Insumo.quantidade > 0
+        Insumo.quantidade > 0,
+        Insumo.propriedade_id == propriedade.id
     ]
     insumos = Insumo.query.filter(*filtros).order_by(Insumo.nome.asc()).all()
-    form.produto.choices = [(insumo.id, insumo.nome) for insumo in insumos]
 
     if form.validate_on_submit():
-        propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
-        if not propriedade:
-            flash("Você precisa cadastrar sua propriedade para registrar produções", 'flash-alerta')
-            return redirect(url_for('producoes_adicionar'))
 
         if form.data.data < datetime.date(2018, 1, 1):
             flash("Você está inserindo uma prodção muito antiga", 'flash-alerta')
             return redirect(url_for('producoes_adicionar'))
+
+        filtros_produto = filtros + [
+            Insumo.nome == request.form['data-insumo']
+        ]
+        produto_id = Insumo.query.filter(*filtros_produto).first().id
         
+        if not produto_id:
+            flash("Prooduto não encontrado", 'flash-falha')
+            return redirect(url_for('producoes_adicionar'))
+
         producao = Producao(
             propriedade_id = propriedade.id,
             nome = form.nome.data,
@@ -149,7 +161,7 @@ def producoes_adicionar():
             db.session.refresh(producao)
             insumo_base = ProducaoInsumo(
                 producao_id = producao.id,
-                insumo_id = form.produto.data,
+                insumo_id = produto_id,
                 base = True
             )
             db.session.add(insumo_base)
@@ -159,4 +171,4 @@ def producoes_adicionar():
             return redirect(url_for('producoes_adicionar'))
         flash("Produção criada com sucesso", 'falha-sucesso')
         return redirect(url_for("producoes_atuais"))
-    return render_template('producao_cadastro.html', form=form, botao="Criar produção")
+    return render_template('producao_cadastro.html', form=form, botao="Criar produção", insumos=insumos)

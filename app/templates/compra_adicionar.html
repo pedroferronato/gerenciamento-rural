@@ -31,15 +31,14 @@
                 {% endif %}
             </div>
             <div>
-                {{ form.fornecedor.label }}
-                {% if form.fornecedor.errors %}
-                    {{ form.fornecedor(class="input-error") }}
-                    {% for error in form.fornecedor.errors %}
-                        <span class="span-erro">{{ error }}</span>
+                <label for="data-fornecedor">Fornecedor:</label>
+                <input autocomplete="off" name="data-fornecedor" id="data-fornecedor" list="forne" 
+                placeholder="Busque aqui">
+                <datalist name="forne" id="forne">
+                    {% for fornecedor in fornecedores %}
+                        <option value="{{ fornecedor.nome }}"></option>
                     {% endfor %}
-                {% else %}
-                    {{ form.fornecedor }}
-                {% endif %}
+                </datalist>
             </div>
             <div>
                 {{ form.finalidade.label }}
@@ -55,12 +54,12 @@
             <div>
                 {{ form.data.label }}
                 {% if form.data.errors %}
-                    {{ form.data(class="input-error") }}
+                    {{ form.data(class="input-error campo-data") }}
                     {% for error in form.data.errors %}
                         <span class="span-erro">{{ error }}</span>
                     {% endfor %}
                 {% else %}
-                    {{ form.data }}
+                    {{ form.data(class="campo-data") }}
                 {% endif %}
             </div>
             <div>
@@ -125,5 +124,9 @@
 {% endblock corpo %}
 
 {% block codigo %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 <script src="{{ url_for('static', filename='js/valor_total_compra.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
 {% endblock codigo %}

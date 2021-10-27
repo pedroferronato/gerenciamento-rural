@@ -5,8 +5,6 @@ from wtforms.validators import DataRequired, NumberRange
 
 
 class ProducaoForm(FlaskForm):
-    produto = SelectField('Produto:', 
-                            validators=[DataRequired(message="Insira o produto da criação (Plantado ou posto)")])
     nome = StringField('Nome identificador:', 
                             validators=[DataRequired(message="Insira uma nome para identificar a produção")])
     quantidade = FloatField('Quantidade do produto:', 
