@@ -27,6 +27,7 @@ import app.models.produto
 import app.models.insumo
 import app.models.producao
 import app.models.producao_insumo
+import app.models.producao_produto
 import app.models.venda
 import app.models.compra
 
@@ -37,3 +38,4 @@ import app.controllers.cliente_controller
 import app.controllers.producao_controller
 import app.controllers.fornecedor_controller
 import app.controllers.despesas_controller
+import app.controllers.insumo_controller

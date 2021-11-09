@@ -5,6 +5,13 @@
 {% endblock titulo %}
 
 {% block corpo %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     {% if compra %}
         <div class="cartao cartao-detalhes">
             <p class="detalhes-titulo">{{ compra.get_insumo().nome }}</p>
@@ -48,7 +55,7 @@
         </div>
 
     {% else %}
-        <div class="cartao">
+        <div class="cartao cartao-detalhes">
             <p class="detalhes-titulo">Compra não encontrada</p>
         </div>
     {% endif %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Produções
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Finalizar produção</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<p class="flashed-alert {{ category }}">{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="cartao cartao-detalhes">
+    <p class="detalhes-titulo">{{ producao.nome }}</p>
+
+    <label>Data de início:</label>
+    <p class="detalhes-informacoes">{{ producao.data.strftime('%d/%m/%Y') }}</p>
+</div>
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('producao_finalizar', producao_id=producao_id) }}"
+        method="post">
+        <div class="form-wrapper">
+            <div>
+                <label for="data">Confirme a data:</label>
+                <input autocomplete="off" class="campo-data" name="data" id="data" value="{{ data.strftime('%d/%m/%Y') }}">
+            </div>
+            <div>
+                <label for="data">Valor unitário:</label>
+                <input autocomplete="off" name="unitario" id="unitario">
+            </div>
+            <div>
+                <label for="data">Validade:</label>
+                <input autocomplete="off" class="campo-data" name="validade" id="validade">
+            </div>
+            <div>
+                <label for="data">Unidade de medida:</label>
+                <input autocomplete="off" name="medida" id="medida">
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+{% endblock corpo %}
+
+{% block codigo %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+{% endblock codigo %}

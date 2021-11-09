@@ -1,12 +1,12 @@
 import datetime
 
-from sqlalchemy.sql.operators import isnot_distinct_from
 from app import application, db
 from app.forms.producao_form import ProducaoForm
 from app.forms.estoque_form import EstoqueForm
 from app.forms.producao_finalizada_form import ProducaoFinalizadasForm
 from app.models.producao import Producao
 from app.models.producao_insumo import ProducaoInsumo
+from app.models.producao_produto import Coleta
 from app.models.propriedade import Propriedade
 from app.models.insumo import Insumo
 from app.models.produto import Produto
@@ -105,11 +105,11 @@ def producoes_finalizadas():
 
     if len(producoes.all()) == 0:
         flash('Nenhuma produção finalizada encontrada', 'flash-alerta')
-        return render_template('producao_finalizadas.html')
+        return render_template('producao_finalizadas.html', form=form)
 
     if len(producoes.all()) > 10:
         producoes = producoes.paginate(page=page, per_page=10)
-        return render_template('producao_finalizadas.html', pages=producoes)
+        return render_template('producao_finalizadas.html', pages=producoes, form=form)
     
     producoes = producoes.all()
 
@@ -126,25 +126,26 @@ def producoes_adicionar():
 
     form = ProducaoForm()
     filtros = [
-        Insumo.utilidade == "Criação",
+        Insumo.utilidade == "Cultivo",
         Insumo.quantidade > 0,
         Insumo.propriedade_id == propriedade.id
     ]
     insumos = Insumo.query.filter(*filtros).order_by(Insumo.nome.asc()).all()
-
+    
     if form.validate_on_submit():
 
         if form.data.data < datetime.date(2018, 1, 1):
-            flash("Você está inserindo uma prodção muito antiga", 'flash-alerta')
+            flash("Você está inserindo uma produção muito antiga", 'flash-alerta')
             return redirect(url_for('producoes_adicionar'))
 
         filtros_produto = filtros + [
-            Insumo.nome == request.form['data-insumo']
+            Insumo.id == request.form['data-insumo'].split(' - ')[0],
+            Insumo.nome == request.form['data-insumo'].split(' - ')[1]
         ]
         produto_id = Insumo.query.filter(*filtros_produto).first().id
         
         if not produto_id:
-            flash("Prooduto não encontrado", 'flash-falha')
+            flash("Produto não encontrado", 'flash-falha')
             return redirect(url_for('producoes_adicionar'))
 
         producao = Producao(
@@ -165,10 +166,174 @@ def producoes_adicionar():
                 base = True
             )
             db.session.add(insumo_base)
+            db.session.flush()
+            insumo_estoque = Insumo.query.filter_by(id = produto_id, propriedade_id=propriedade.id).first()
+            if insumo_estoque.quantidade_estocada < producao.quantidade:
+                flash("Falta de insumo, verifique o valor inserido", 'flash-falha')
+                return redirect(url_for('producoes_adicionar'))
+            insumo_estoque.quantidade_estocada -= producao.quantidade
+            db.session.add(insumo_estoque)
+            db.session.commit()
+        except Exception as e:
+            flash("Falha ao criar produção", 'flash-falha')
+            return redirect(url_for('producoes_adicionar'))
+        flash("Produção criada com sucesso", 'flash-sucesso')
+        return redirect(url_for("producoes_atuais"))
+    return render_template('producao_cadastro.html', form=form, botao="Criar produção", insumos=insumos)
+
+
+@application.route('/producoes/detalhes/<producao_id>')
+@login_required
+def producao_detalhes(producao_id):
+    producao = Producao.query.filter_by(id=producao_id).first()
+    if not producao:
+        flash("A produção que você buscou não existe", 'flash-alerta')
+        return redirect(url_for('producoes_atuais'))
+    return render_template('producao_detalhes.html', producao=producao)
+
+
+@application.route('/producoes/adicionar/custeio/<producao_id>', methods=['GET', 'POST'])
+@login_required
+def producao_adicionar_custeio(producao_id):
+    propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
+    if not propriedade:
+        flash("Você precisa cadastrar sua propriedade para registrar produções", 'flash-alerta')
+        return redirect(url_for('producao_adicionar_custeio'))
+    producao = Producao.query.filter_by(id=producao_id).first()
+    if not producao:
+        flash("A produção que você buscou não existe", 'flash-alerta')
+        return redirect(url_for('producoes_atuais'))
+    filtros = [
+        Insumo.quantidade > 0,
+        Insumo.propriedade_id == propriedade.id
+    ]
+    insumos = Insumo.query.filter(*filtros).all()
+    if request.method == 'POST':
+        filtros_produto = filtros + [
+            Insumo.id == request.form['data-insumo'].split(' - ')[0],
+            Insumo.nome == request.form['data-insumo'].split(' - ')[1]
+        ]
+        insumo = Insumo.query.filter(*filtros_produto).first()
+        custeio = ProducaoInsumo(
+            producao_id = producao_id,
+            insumo_id = insumo.id,
+            quantidade_aplicada = request.form['quantidade'],
+            data = datetime.datetime.strptime(request.form['data'], '%d/%m/%Y').date(),
+            base = False
+        )
+
+        try:
+            db.session.add(custeio)
             db.session.commit()
         except:
             flash("Falha ao criar produção", 'flash-falha')
             return redirect(url_for('producoes_adicionar'))
-        flash("Produção criada com sucesso", 'falha-sucesso')
-        return redirect(url_for("producoes_atuais"))
-    return render_template('producao_cadastro.html', form=form, botao="Criar produção", insumos=insumos)
+        flash("Custeio adicionado com sucesso", 'flash-sucesso')
+        return redirect(url_for("producao_detalhes", producao_id=producao_id))
+    return render_template('producao_adicionar_custeio.html', producao_id=producao_id, insumos=insumos, producao=producao, botao="Adicionar custeio")
+
+
+@application.route('/producao/<producao_id>/confirmar-finalizar')
+@login_required
+def producao_confirmar_finalizar(producao_id):
+    producao = Producao.query.filter_by(id=producao_id).first()
+    if not producao:
+        flash("Produção não encontrada", 'flash-falha')
+        return redirect(url_for('producoes_atuais'))
+    if not producao.ativa:
+        flash("Produção já foi finalizada", 'flash-falha')
+        return redirect(url_for('producoes_finalizadas'))
+    return render_template('producao_finalizar.html', producao=producao, botao="Finalizar produção", data=datetime.date.today())
+
+
+@application.route('/producao/<producao_id>/finalizar')
+@login_required
+def producao_finalizar(producao_id):
+    producao = Producao.query.filter_by(id=producao_id).first()
+
+    produto = Produto.query.filter_by(producao_id=producao.id).first()
+
+    if produto:
+        produto.quantidade += float(producao.quantidade_atual)
+    else:
+        propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
+
+        produto = Produto(
+            producao_id = producao.id,
+            propriedade_id = propriedade.id,
+            nome = producao.get_insumo_base().nome,
+            quantidade = float(producao.quantidade_atual),
+            valor_unitario = request.form['unitario'],
+            validade = request.form['validade'],
+            unidade_medida = request.form['medida']
+        )
+
+    producao.quantidade_atual = 0
+    producao.data_coleta = datetime.datetime.strptime(str(request.form['data']), "%d/%m/%Y").date() 
+
+    try:
+        db.session.add(produto)
+        db.session.add(producao)
+        db.session.commit(producao)
+    except:
+        flash("Falha ao criar produção", 'flash-falha')
+        return redirect(url_for('producoes_atuais'))
+    flash("Produção finalizada", 'flash-sucesso')
+    return redirect(url_for('producoes_finalizadas'))
+
+
+@application.route('/producao/<producao_id>/coleta', methods=['GET', 'POST'])
+@login_required
+def producao_coleta(producao_id):
+    producao = Producao.query.filter_by(id=producao_id).first()
+    if not producao:
+        flash("Produção não encontrada", 'flash-falha')
+        return redirect(url_for('producoes_atuais'))
+    if not producao.ativa:
+        flash("Produção já foi finalizada", 'flash-falha')
+        return redirect(url_for('producoes_finalizadas'))
+    
+    if request.method == 'POST':
+        quantidade = float(request.form['quantidade'])
+        if producao.quantidade_atual < quantidade:
+            flash("Quantidade superor à atual", 'flash-falha')
+            return redirect(url_for('producoes_atuais'))
+
+        produto = Produto.query.filter_by(producao_id=producao.id).first()
+
+        if produto:
+            produto.quantidade += float(producao.quantidade_atual)
+        else:
+            propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
+
+            produto = Produto(
+                producao_id = producao.id,
+                propriedade_id = propriedade.id,
+                nome = producao.get_insumo_base().nome,
+                quantidade = float(producao.quantidade_atual),
+                valor_unitario = request.form['unitario'],
+                validade = request.form['validade'],
+                unidade_medida = request.form['medida']
+            )
+    
+        producao.quantidade_atual -= quantidade
+
+        coleta = Coleta(
+            data_coleta = datetime.datetime.strptime(str(request.form['data']), "%d/%m/%Y").date(),
+            producao_id = producao_id,
+            quantidade = quantidade,
+            unidade_especifica = request.form['unidade']
+        )
+
+        try:
+            db.session.add(produto)
+            db.session.add(producao)
+            db.session.add(coleta)
+            db.session.commit()
+        except:
+            flash("Falha ao registrar coleta", 'flash-falha')
+            return redirect(url_for('producao_detalhes', producao_id=producao_id))
+        flash(f"Coleta na produção {producao.nome} reistrada", 'flash-sucesso')
+        return redirect(url_for('producoes_atuais'))
+
+    return render_template('producao_coleta.html', botao="Registrar coleta", producao=producao, data=datetime.date.today())

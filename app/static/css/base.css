@@ -84,10 +84,6 @@ a {
     color: #5C5C5C;
 }
 
-.verde {
-    background-color: var(--verde);
-}
-
 h2.titulo {
     font-size: 20px;
     color: #363636;
@@ -113,14 +109,12 @@ h3.titulo {
     color: white;
     font-weight: bold;
     font-size: 18px;
-    letter-spacing: 1px;
 }
 
 .texto-botao-cinza {
     color: var(--cinzaTexto);
     font-weight: bold;
     font-size: 18px;
-    letter-spacing: 1px;
 }
 
 .icone-botao {
@@ -334,6 +328,7 @@ html, body {
     background-color: white;
     text-align: center;
     box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.06);
+    margin-top: 80px;
 }
 
 .titulo-rodape {
@@ -377,6 +372,10 @@ html, body {
 
 .logo-if {
     margin-top: 8px;
+}
+
+.verde {
+    background-color: var(--verde);
 }
 
 .azul {
