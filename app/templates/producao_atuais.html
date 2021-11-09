@@ -15,14 +15,19 @@ Produções
 {% endif %}
 {% endwith %}
 
-<div class="cartao minicard">
-    <div>
-        <p class="minicard-titulo">Frango</p>
-        <p class="minicard-subtitulo">Data de início: 18/10/2021</p>
-        <p class="minicard-subtitulo">Produto: Frango</p>
-    </div>
-    <div>
-        <span class="material-icons minicard-icon">description</span>
-    </div>
-</div>
+{% for producao in producoes %}
+    <a href="{{ url_for('producao_detalhes', producao_id=producao.id) }}">
+        <div class="cartao minicard">
+            <div>
+                <p class="minicard-titulo">{{ producao.nome }}</p>
+                <p class="minicard-subtitulo">Data de início: {{ producao.data.strftime('%d/%m/%Y') }}</p>
+                <p class="minicard-subtitulo">Produto: {{ producao.get_insumo_base().nome }}</p>
+            </div>
+            <div>
+                <span class="material-icons minicard-icon">description</span>
+            </div>
+        </div>
+    </a>
+{% endfor %}
+
 {% endblock corpo %}

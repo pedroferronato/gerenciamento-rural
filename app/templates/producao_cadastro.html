@@ -16,7 +16,7 @@
 {% endwith %}
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('cliente_cadastro') }}" method="post">
+    <form class="formulario-interno" action="{{ url_for('producoes_adicionar') }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             <div>
@@ -25,7 +25,7 @@
                 placeholder="Busque aqui">
                 <datalist name="produto" id="produto">
                     {% for produto in insumos %}
-                        <option value="{{ produto.nome }}"></option>
+                        <option value="{{ produto.id }} - {{ produto.nome }}">{{ produto.quantidade_estocada_formatada() }}</option>
                     {% endfor %}
                 </datalist>
             </div>
@@ -54,12 +54,12 @@
             <div>
                 {{ form.data.label }}
                 {% if form.data.errors %}
-                    {{ form.data(class="input-error") }}
+                    {{ form.data(class="input-error campo-data") }}
                     {% for error in form.data.errors %}
                         <span class="span-erro">{{ error }}</span>
                     {% endfor %}
                 {% else %}
-                    {{ form.data }}
+                    {{ form.data(class="campo-data") }}
                 {% endif %}
             </div>
             <button>{{ botao }}</button>
@@ -67,3 +67,10 @@
     </form>
 </div>
 {% endblock corpo %}
+
+{% block codigo %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+{% endblock codigo %}

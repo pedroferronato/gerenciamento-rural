@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Produções
+{% endblock titulo %}
+
+{% block corpo %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if producao %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">{{ producao.nome }}</p>
+
+            <label>Data de início:</label>
+            <p class="detalhes-informacoes">{{ producao.data.strftime('%d/%m/%Y') }}</p>
+
+            {% if producao.data_coleta %}
+                <label>Data de coleta:</label>
+                <p class="detalhes-informacoes">{{ producao.data_coleta.strftime('%d/%m/%Y') }}</p>
+            {% endif %}
+
+            <label>Estado da produção:</label>
+            {% if producao.ativa %}
+                <p class="detalhes-informacoes">Em andamento</p>
+            {% else %}
+                <p class="detalhes-informacoes">Finalizada</p>
+            {% endif %}
+        </div>
+
+        <a class="botao azul texto-botao-branco" href="{{ url_for('producao_adicionar_custeio', producao_id=producao.id) }}">Adicionar custeio agrícola</a>
+
+        <div class="cartao cartao-detalhes">
+            <label>Produto base:</label>
+            <p class="detalhes-informacoes">{{ producao.get_insumo_base().nome }}</p>
+            {% if producao.quantidade %}
+                <p class="detalhes-informacoes">Quantidade inicial: {{ producao.quantidade_formatada() }} {{ producao.get_insumo_base().unidade_medida }}</p>
+            {% endif %}
+        </div>
+
+        {% if producao.get_coletas() %}
+            <h2 class="titulo">Coletas realizadas</h2>
+            {% for coleta in producao.get_coletas() %}
+                <div class="cartao cartao-detalhes">
+                    <p class="detalhes-titulo">{{ coleta.data_coleta.strftime('%d/%m/%Y') }}</p>
+
+                    <label>Quantidade coletada:</label>
+                    <p class="detalhes-informacoes">{{ coleta.quantidade_formatada() }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% for producaoInsumo in producao.get_insumos_adicionados() %}
+            {% if producaoInsumo.get_insumo_relacionado() %}
+                {% with insumo = producaoInsumo.get_insumo_relacionado() %}
+                    <div class="cartao cartao-detalhes">
+                        <p class="detalhes-titulo">{{ insumo.nome }}</p>
+
+                        <label>Data de aplicação:</label>
+                        <p class="detalhes-informacoes">{{ producaoInsumo.data.strftime('%d/%m/%Y') }}</p>
+
+                        <label>Quantidade aplicada:</label>
+                        <p class="detalhes-informacoes">{{ producaoInsumo.quantidade_aplicada }} {{ insumo.unidade_medida }}</p>
+
+                        <label>Utilidade:</label>
+                        <p class="detalhes-informacoes">{{ insumo.utilidade }}</p>
+                        <a href="{{ url_for('insumo_detalhe', insumo_id=insumo.id) }}">Verificar insumo</a>
+                    </div>
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+
+        <a class="botao amarelo texto-botao-cinza" href="{{ url_for('producao_coleta', producao_id=producao.id) }}">Adicionar coleta</a>
+        <a class="botao verde texto-botao-branco" href="{{ url_for('producao_confirmar_finalizar', producao_id=producao.id) }}">Finaizar produção</a>
+
+    {% else %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Produção não encontrada</p>
+        </div>
+    {% endif %}
+{% endblock corpo %}
