@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Vendas
+{% endblock titulo %}
+
+{% block corpo %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if venda %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">{{ venda.data.strftime('%d/%m/%Y') }}</p>
+
+            <div class="detalhes-flex">
+                <div>
+                    <label>Cliente:</label>
+                    <p class="detalhes-informacoes">{{ venda.get_cliente().nome }}</p>
+                </div>
+                <div>
+                    <label>Produto:</label>
+                    <p class="detalhes-informacoes">{{ venda.get_produto().nome }}</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Pagamento</p>
+
+            <label>Quantidade:</label>
+            <p class="detalhes-informacoes">{{ venda.quantidade_formatada() }}</p>
+
+            <label>Valor unitário:</label>
+            <p class="detalhes-informacoes">{{ venda.valor_unitario_formatado() }}</p>
+
+            {% if venda.desconto %}
+                <label>Desconto:</label>
+                <p class="detalhes-informacoes">{{ venda.desconto }}</p>
+            {% endif %}
+
+            <label>Valor final:</label>
+            <p class="detalhes-informacoes">{{ compra.get_insumo().valor_final_formatado() }}</p>
+        </div>
+
+    {% else %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Venda não encontrada</p>
+        </div>
+    {% endif %}
+{% endblock corpo %}

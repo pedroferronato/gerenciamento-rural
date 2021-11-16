@@ -39,3 +39,4 @@ import app.controllers.producao_controller
 import app.controllers.fornecedor_controller
 import app.controllers.despesas_controller
 import app.controllers.insumo_controller
+import app.controllers.vendas_controller

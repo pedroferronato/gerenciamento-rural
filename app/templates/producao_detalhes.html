@@ -74,6 +74,17 @@
             {% endif %}
         {% endfor %}
 
+        <div class="cartao cartao-detalhes">
+            <div class="detalhes-flex">
+                <label>Custo total dessa produção:</label>
+                <p class="detalhes-informacoes">{{ custos }}</p>
+            </div>
+            <div class="detalhes-flex">
+                <label>Você gastou em cada unidade:</label>
+                <p class="detalhes-informacoes">{{ custo_unitario }}</p>
+            </div>
+        </div>
+
         <a class="botao amarelo texto-botao-cinza" href="{{ url_for('producao_coleta', producao_id=producao.id) }}">Adicionar coleta</a>
         <a class="botao verde texto-botao-branco" href="{{ url_for('producao_confirmar_finalizar', producao_id=producao.id) }}">Finaizar produção</a>
 

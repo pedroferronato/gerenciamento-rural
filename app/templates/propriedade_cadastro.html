@@ -15,57 +15,64 @@
     {% endif %}
 {% endwith %}
 
-<div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('propriedades_cadastro') }}" method="post">
-        {{ form.hidden_tag() }}
-        <div class="form-wrapper">
-            <div>
-                {{ form.nome.label }}
-                {% if form.nome.errors %}
-                    {{ form.nome(class="input-error") }}
-                    {% for error in form.nome.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.nome }}
-                {% endif %}
+{% if not current_user.get_propriedade() %}
+    <div class="cartao">
+        <form class="formulario-interno" action="{{ url_for('propriedades_cadastro') }}" method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-wrapper">
+                <div>
+                    {{ form.nome.label }}
+                    {% if form.nome.errors %}
+                        {{ form.nome(class="input-error") }}
+                        {% for error in form.nome.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.nome }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.endereco.label }}
+                    {% if form.endereco.errors %}
+                        {{ form.endereco(class="input-error") }}
+                        {% for error in form.endereco.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.endereco }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.area.label }}
+                    {% if form.area.errors %}
+                        {{ form.area(class="input-error") }}
+                        {% for error in form.area.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.area }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.contato.label }}
+                    {% if form.contato.errors %}
+                        {{ form.contato(class="input-error") }}
+                        {% for error in form.contato.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.contato }}
+                    {% endif %}
+                </div>
+                <button>{{ botao }}</button>
             </div>
-            <div>
-                {{ form.endereco.label }}
-                {% if form.endereco.errors %}
-                    {{ form.endereco(class="input-error") }}
-                    {% for error in form.endereco.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.endereco }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.area.label }}
-                {% if form.area.errors %}
-                    {{ form.area(class="input-error") }}
-                    {% for error in form.area.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.area }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.contato.label }}
-                {% if form.contato.errors %}
-                    {{ form.contato(class="input-error") }}
-                    {% for error in form.contato.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.contato }}
-                {% endif %}
-            </div>
-            <button>{{ botao }}</button>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+{% else %}
+    <div class="cartao cartao-detalhes">
+        <p class="detalhes-titulo">Você já registrou sua propriedade.</p>
+    </div>
+{% endif %}
+    
 
 {% endblock corpo %}

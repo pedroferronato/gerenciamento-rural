@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Insumos
+{% endblock titulo %}
+
+{% block corpo %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if insumo %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">{{ insumo.nome }}</p>
+
+            <div class="detalhes-flex">
+                <div>
+                    <label>Fornecido por:</label>
+                    <p class="detalhes-informacoes">{{ insumo.get_fornecedor().nome }}</p>
+                </div>
+                <div>
+                    <label>Utilidade:</label>
+                    <p class="detalhes-informacoes">{{ insumo.utilidade }}</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Pagamento</p>
+
+            <label>Quantidade:</label>
+            <p class="detalhes-informacoes">{{ insumo.quantidade_formatada() }}</p>
+
+            <label>Valor unitário:</label>
+            <p class="detalhes-informacoes">{{ insumo.valor_unitario_formatado() }}</p>
+
+            <label>Valor final:</label>
+            <p class="detalhes-informacoes">{{ insumo.valor_final_formatado() }}</p>
+        </div>
+
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Estoque</p>
+            
+            <label>Quantidade em estoque:</label>
+            <p class="detalhes-informacoes">{{ insumo.quantidade_estocada_formatada() }}</p>
+        </div>
+
+    {% else %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Insumo não encontrada</p>
+        </div>
+    {% endif %}
+{% endblock corpo %}

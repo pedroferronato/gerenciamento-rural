@@ -33,6 +33,20 @@ class Producao(db.Model):
         ]
         return ProducaoInsumo.query.filter(*filtros).all()
 
+
+    def get_custos(self):
+        despesas_producao = ProducaoInsumo.query.filter_by(producao_id=self.id).all()
+
+        if len(despesas_producao) <= 0:
+            return 0
+        
+        despesa_final = 0
+
+        for despesa in despesas_producao:
+            despesa_final += despesa.quantidade_aplicada * despesa.get_insumo_relacionado().valor_unitario
+
+        return despesa_final
+
     
     def get_coletas(self):
         return Coleta.query.filter_by(producao_id=self.id).all()
