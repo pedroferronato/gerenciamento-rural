@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-    Despesas
+    Vendas
 {% endblock titulo %}
 
 {% block corpo %}
-<h2 class="titulo">Registrar compra</h2>
+<h2 class="titulo">Registrar venda</h2>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -16,7 +16,7 @@
 {% endwith %}
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('despesas_compra') }}" method="post">
+    <form class="formulario-interno" action="{{ url_for('venda_adicionar') }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             <div>
@@ -31,25 +31,24 @@
                 {% endif %}
             </div>
             <div>
-                <label for="data-fornecedor">Fornecedor:</label>
-                <input autocomplete="off" name="data-fornecedor" id="data-fornecedor" list="forne" 
+                <label for="data-fornecedor">Cliente:</label>
+                <input autocomplete="off" name="data-cliente" id="data-cliente" list="cliente" 
                 placeholder="Busque aqui">
-                <datalist name="forne" id="forne">
-                    {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.nome }}"></option>
+                <datalist name="cliente" id="cliente">
+                    {% for cliente in clientes %}
+                        <option value="{{ cliente.id }} - {{ cliente.nome }}"></option>
                     {% endfor %}
                 </datalist>
             </div>
             <div>
-                {{ form.finalidade.label }}
-                {% if form.finalidade.errors %}
-                    {{ form.finalidade(class="input-error") }}
-                    {% for error in form.finalidade.errors %}
-                        <span class="span-erro">{{ error }}</span>
+                <label for="data-fornecedor">Produto:</label>
+                <input autocomplete="off" name="data-produto" id="data-produto" list="produto" 
+                placeholder="Busque aqui">
+                <datalist name="produto" id="produto">
+                    {% for produto in produtos %}
+                        <option value="{{ produto.id }} - {{ produto.nome }}">{{ produto.quantidade_estocada_formatada() }}</option>
                     {% endfor %}
-                {% else %}
-                    {{ form.finalidade }}
-                {% endif %}
+                </datalist>
             </div>
             <div>
                 {{ form.data.label }}
@@ -82,17 +81,6 @@
                     {% endfor %}
                 {% else %}
                     {{ form.quantidade(placeholder="0") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.unidade.label }}
-                {% if form.unidade.errors %}
-                    {{ form.unidade(class="input-error") }}
-                    {% for error in form.unidade.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.unidade }}
                 {% endif %}
             </div>
             <div>

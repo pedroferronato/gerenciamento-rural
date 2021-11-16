@@ -186,10 +186,20 @@ def producoes_adicionar():
 @login_required
 def producao_detalhes(producao_id):
     producao = Producao.query.filter_by(id=producao_id).first()
+
     if not producao:
         flash("A produção que você buscou não existe", 'flash-alerta')
         return redirect(url_for('producoes_atuais'))
-    return render_template('producao_detalhes.html', producao=producao)
+
+    producao_custo = producao.get_custos()
+    
+    custos = "{} {}".format("R$", producao_custo)
+
+    custo_unitario = producao_custo / producao.quantidade
+
+    custo_unitario_formatado = "{} {}".format("R$", custo_unitario)
+
+    return render_template('producao_detalhes.html', producao=producao, custos=custos, custo_unitario=custo_unitario_formatado)
 
 
 @application.route('/producoes/adicionar/custeio/<producao_id>', methods=['GET', 'POST'])

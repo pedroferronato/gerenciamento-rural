@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-    Despesas
+    Vendas
 {% endblock titulo %}
 
 {% block corpo %}
-<h2 class="titulo">Histórico de compras</h2>
+<h2 class="titulo">Histórico de vendas</h2>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -16,47 +16,23 @@
 {% endwith %}
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('despesas_compra_historico_resultado') }}" method="get">
+    <form class="formulario-interno" action="{{ url_for('venda_historico_busca') }}" method="get">
         <div class="form-wrapper">
             <div>
-                <label for="data-fornecedor">Fornecedor:</label>
-                <input autocomplete="off" name="data-fornecedor" id="data-fornecedor" list="forne" 
-                placeholder="Busque aqui">
-                <datalist name="forne" id="forne">
-                    {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.nome }}"></option>
-                    {% endfor %}
-                </datalist>
+                <label for="dataInicial">Data inicial:</label>
+                <input class="campo-data" name="data_inicio" id="dataInicial">
             </div>
             <div>
-                {{ form.data_inicio.label }}
-                {% if form.data_inicio.errors %}
-                    {{ form.data_inicio(class="input-error campo-data") }}
-                    {% for error in form.data_inicio.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data_inicio(class="campo-data") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.data_final.label }}
-                {% if form.data_final.errors %}
-                    {{ form.data_final(class="input-error campo-data") }}
-                    {% for error in form.data_final.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data_final(class="campo-data") }}
-                {% endif %}
+                <label for="dataFinal">Data final:</label>
+                <input class="campo-data" name="data_final" id="dataFinal">
             </div>
             <button>{{ botao }}</button>
         </div>
     </form>
 </div>
 
-{% if compras %}
-    {% for compra in compras %}
+{% if vendas %}
+    {% for venda in vendas %}
     <div class="cartao minicard">
         <div>
             <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
@@ -71,7 +47,7 @@
 {% endif %}
 
 {% if pages %}
-    {% for compra in pages.items %}
+    {% for resultado in pages.items %}
         <div class="cartao minicard">
             <div>
                 <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
@@ -86,9 +62,9 @@
     {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
             {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao paginador-atual" href="{{ url_for('venda_historico_busca', page=page_num) }}">{{ page_num }}</a>
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao" href="{{ url_for('venda_historico_busca', page=page_num) }}">{{ page_num }}</a>
             {% endif %}
         {% else %}
             ...

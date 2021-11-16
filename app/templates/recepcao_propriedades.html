@@ -28,9 +28,12 @@ Propriedades
         <div class="aviso-nulo">Nenhuma propriedade registrada no momento</div>
     {% endif %}
 
-    <a href="{{ url_for('propriedades_cadastro') }}">
-        <div class="botao verde texto-botao-branco">
-            Cadastrar nova propriedade
-        </div>
-    </a>
+    {% if not current_user.get_propriedade() %}    
+        <a href="{{ url_for('propriedades_cadastro') }}">
+            <div class="botao verde texto-botao-branco">
+                Cadastrar nova propriedade
+            </div>
+        </a>
+    {% endif %}
+
 {% endblock corpo %}

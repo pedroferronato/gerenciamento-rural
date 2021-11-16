@@ -1,5 +1,6 @@
 from app import db
-import math
+
+from app.models.movimentador import Movimentador
 
 
 class Insumo(db.Model):
@@ -15,6 +16,10 @@ class Insumo(db.Model):
     valor_total = db.Column(db.Float)
     utilidade = db.Column(db.String(100), nullable=False)
     unidade_medida = db.Column(db.String(50))
+
+
+    def get_fornecedor(self):
+        return Movimentador.query.filter_by(id=self.fornecedor_id).first()
 
 
     def valor_final_formatado(self):

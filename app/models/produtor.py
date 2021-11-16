@@ -1,4 +1,5 @@
 from app import db
+from app.models.propriedade import Propriedade
 from flask_login import UserMixin
 
 
@@ -26,3 +27,7 @@ class Produtor(db.Model, UserMixin):
 
     def get_id(self):
         return self.id
+
+    
+    def get_propriedade(self):
+        return Propriedade.query.filter_by(produtor_id=self.id)
