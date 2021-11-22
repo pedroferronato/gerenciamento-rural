@@ -125,7 +125,7 @@ def venda_historico_busca():
 
 @application.route('/venda/<venda_id>')
 @login_required
-def venda_historico(venda_id):
+def venda_detalhes(venda_id):
     venda = Venda.queri.filter_by(id=venda_id).first()
 
     if not venda:
