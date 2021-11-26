@@ -423,6 +423,10 @@ html, body {
     justify-content: space-between;
 }
 
+.detalhes-flex-unidade {
+    margin-top: 8px;
+}
+
 .detalhes-informacoes:not(:last-child){
     margin-bottom: 16px;
 }

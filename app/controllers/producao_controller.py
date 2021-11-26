@@ -193,11 +193,11 @@ def producao_detalhes(producao_id):
 
     producao_custo = producao.get_custos()
     
-    custos = "{} {}".format("R$", producao_custo)
+    custos = "{} {:.2f}".format("R$", producao_custo)
 
     custo_unitario = producao_custo / producao.quantidade
 
-    custo_unitario_formatado = "{} {}".format("R$", custo_unitario)
+    custo_unitario_formatado = "{} {:.2f}".format("R$", custo_unitario)
 
     return render_template('producao_detalhes.html', producao=producao, custos=custos, custo_unitario=custo_unitario_formatado)
 
