@@ -56,6 +56,7 @@ input {
     border-bottom: 2px solid #838383;
     height: 36px;
     font-size: 18px;
+    outline: none;
 }
 
 a {
@@ -82,6 +83,24 @@ button {
     color: red;
 }
 
+.flash-sucesso {
+    border-color: rgb(31, 117, 23);
+    background-color: rgb(214, 255, 210);
+    color: rgb(31, 117, 23);
+}
+
+.flash-falha {
+    border-color: #d83e3e;
+    background-color: #ffd7d7;
+    color: #d83e3e;
+}
+
+.flash-alerta {
+    border-color: #857100;
+    background-color: #faf4d0;
+    color: #857100;
+}
+
 .span-erro {
     color: red;
     margin-top: 8px;
@@ -95,4 +114,15 @@ h3.titulo {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 8px;
+}
+
+@media only screen and (min-width: 767px) {
+    .corpo {
+        margin: 0 auto;
+        max-width: 500px;
+    }
+
+    .corpo form {
+        border-radius: 5px;
+    }
 }

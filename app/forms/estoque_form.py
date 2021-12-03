@@ -4,4 +4,4 @@ from wtforms import StringField, DateField
 
 class EstoqueForm(FlaskForm):
     nome = StringField('Nome:')
-    validade = DateField('Validade:')
+    validade = StringField('Validade:')

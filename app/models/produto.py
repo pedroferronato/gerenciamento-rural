@@ -11,4 +11,9 @@ class Produto(db.Model):
     quantidade = db.Column(db.Float)
     valor_unitario = db.Column(db.Float)
     validade = db.Column(db.Date())
-    unidade_medida = db.Column(db.String(5), nullable=False)
+    unidade_medida = db.Column(db.String(50), nullable=False)
+
+    def quantidade_formatada(self):
+        if self.quantidade.is_integer():
+            return "{} {}".format(int(self.quantidade), self.unidade_medida)
+        return "{} {}".format(self.quantidade, self.unidade_medida)

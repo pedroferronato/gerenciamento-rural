@@ -20,7 +20,7 @@
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             <div>
-                <label for="data-insumo">Produto:</label>
+                <label for="data-insumo">Produto: *</label>
                 <input autocomplete="off" name="data-insumo" id="data-insumo" list="produto" 
                 placeholder="Busque aqui">
                 <datalist name="produto" id="produto">
@@ -30,7 +30,7 @@
                 </datalist>
             </div>
             <div>
-                {{ form.nome.label }}
+                <label for="{{ form.nome.label.field_id }}">{{ form.nome.label.text }} *</label>
                 {% if form.nome.errors %}
                     {{ form.nome(class="input-error") }}
                     {% for error in form.nome.errors %}
@@ -40,27 +40,34 @@
                     {{ form.nome }}
                 {% endif %}
             </div>
-            <div>
-                {{ form.quantidade.label }}
-                {% if form.quantidade.errors %}
-                    {{ form.quantidade(class="input-error") }}
-                    {% for error in form.quantidade.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.quantidade }}
-                {% endif %}
+            
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="{{ form.quantidade.label.field_id }}">{{ form.quantidade.label.text }} *</label>
+                    {% if form.quantidade.errors %}
+                        {{ form.quantidade(class="input-error") }}
+                        {% for error in form.quantidade.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.quantidade }}
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.data.label.field_id }}">{{ form.data.label.text }} *</label>
+                    {% if form.data.errors %}
+                        {{ form.data(class="input-error campo-data") }}
+                        {% for error in form.data.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.data(class="campo-data") }}
+                    {% endif %}
+                </div>
             </div>
-            <div>
-                {{ form.data.label }}
-                {% if form.data.errors %}
-                    {{ form.data(class="input-error campo-data") }}
-                    {% for error in form.data.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data(class="campo-data") }}
-                {% endif %}
+            
+            <div class="cp-obrigatorio">
+                <p>* Campo obrigatório</p>
             </div>
             <button>{{ botao }}</button>
         </div>

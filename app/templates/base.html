@@ -22,7 +22,7 @@
         <div class="sidebar-bar">
             <div>
                 <span id="menu-back" class="material-icons">arrow_back</span>
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema">
+                <a href="{{ url_for('inicial') }}" id="logo-bar"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema"></a>
                 <a href="{{ url_for('despesa') }}" id="despesas">Despesas</a>
                 <a href="{{ url_for('venda') }}">Vendas</a>
                 <a href="{{ url_for('producao') }}">Produções</a>
@@ -39,14 +39,20 @@
     <div class="wrapper">
         <div class="head-bar">
             <div>
-                <h1>{% block titulo %}{% endblock titulo %}</h1>
+                <div class="flex">
+                    <a href="{{ url_for('inicial') }}" id="logo-sup-bar"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo do sistema"></a>
+                    <h1>{% block titulo %}{% endblock titulo %}</h1>
+                </div>
                 <span class="material-icons" id="menu">menu</span>
             </div>
         </div>
-    
-        {% block corpo %}
+        
+        <div class="container">
+            {% block corpo %}
             
-        {% endblock corpo %}
+            {% endblock corpo %}
+        </div>
+        
         <div class="push"></div>
     </div>
     
@@ -54,9 +60,8 @@
         <p class="titulo-rodape">Desenvolvimento</p>
         <p class="dev-rodape">Pedro Luís Ferronato Barreto</p>
         <div class="redes-rodape">
-            <a href=""><span class="material-icons icone-rodape">phone</span></a>
-            <a href=""><img class="git-rodape" src="{{ url_for('static', filename='images/github.png') }}" alt="Logo GitHub"></a>
-            <a href=""><span class="material-icons icone-rodape">mail</span></a>
+            <a href="https://github.com/pedroferronato" target="_blank"><img class="git-rodape" src="{{ url_for('static', filename='images/github.png') }}" alt="Logo GitHub"></a>
+            <a href="mailto: pedroluisfbar@gmail.com"><span class="material-icons icone-rodape">mail</span></a>
         </div>
         <p class="instituto-rodape">IFRO - Campus Vilhena</p>
         <img class="logo-if" src="{{ url_for('static', filename='images/logo-if.png') }}" alt="Logo IFRO">

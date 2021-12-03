@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Fornecedores
+{% endblock titulo %}
+
+{% block corpo %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flashed-alert {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% if fornecedor %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">{{ fornecedor.nome }}</p>
+
+            <div class="detalhes-flex">
+                {% if fornecedor.endereco %}
+                    <div>
+                        <label>Endereço:</label>
+                        <p class="detalhes-informacoes">{{ fornecedor.endereco }}</p>
+                    </div>
+                {% endif %}
+                {% if fornecedor.contato %}
+                    <div>
+                        <label>Contato:</label>
+                        <p class="detalhes-informacoes">{{ fornecedor.contato }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+
+        <a href="{{ url_for('fornecedor_alterar', fornecedor_id=fornecedor.id) }}">
+            <div class="botao amarelo texto-botao-cinza">
+                <span class="material-icons icone-botao texto-botao-cinza">edit</span>
+                <p>Editar</p>
+            </div>
+        </a>
+         
+        <div id="botao-deletar" class="botao vermelho texto-botao-branco">
+            <span class="material-icons icone-botao">delete</span>
+            <p>Excluir</p>
+        </div>
+
+        <div class="modal-exclusao">
+            <div class="modal-conteudo">
+                <p class="aviso-modal">Realmente deseja excluir o fornecedor:</p>
+                <p class="modal-destaque">{{ fornecedor.nome }}</p>
+                <a class="botao vermelho texto-botao-branco" href="{{ url_for('fornecedor_excluir', fornecedor_id=fornecedor.id) }}">Confirmar</a>
+                <div id="btn-dismiss" class="botao cinza-claro texto-botao-cinza">
+                    <p>Cancelar</p>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="cartao cartao-detalhes">
+            <p class="detalhes-titulo">Fornecedor não encontrado</p>
+        </div>
+    {% endif %}
+{% endblock corpo %}
+
+{% block codigo %}
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+{% endblock codigo %}

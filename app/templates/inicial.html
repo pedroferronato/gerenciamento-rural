@@ -16,4 +16,87 @@ Painel
             {% endfor %}
         {% endif %}
     {% endwith %}
+
+    {% if propriedade %}
+        <div class="cartoes-wrap">
+            {% if caixa_mes >= 0 %}
+                <div class="cartao cartao-dashboard">
+            {% else %}
+                <div class="cartao cartao-dashboard dashboard-vermelho">
+            {% endif %}
+                <div><span class="material-icons">
+                    {% if caixa_mes >= 0 %}
+                        arrow_upward
+                    {% else %}
+                        arrow_downward
+                    {% endif %}
+                </span></div>
+                <div>
+                    <p class="dashboard-titulo">Caixa mensal:</p>
+                    <p class="dashboard-valor">R$ {{ '{:.2f}'.format(caixa_mes).replace('.', ',') }}</p>
+                    <p class="dashboard-anterior">Mês anterior: R$ {{ caixa_mes_anterior }}</p>
+                </div>
+            </div>
+            <div class="cartao cartao-dashboard">
+                <div><span class="material-icons">arrow_upward</span></div>
+                <div>
+                    <p class="dashboard-titulo">Rendas:</p>
+                    <p class="dashboard-valor">R$ {{ lucro_mes }}</p>
+                    <p class="dashboard-anterior">Mês anterior: R$ {{ lucro_mes_anterior }}</p>
+                </div>
+            </div>
+            <div class="cartao cartao-dashboard dashboard-vermelho">
+                <div><span class="material-icons">arrow_downward</span></div>
+                <div>
+                    <p class="dashboard-titulo">Gastos:</p>
+                    <p class="dashboard-valor">R$ {{ despesa_mes }}</p>
+                    <p class="dashboard-anterior">Mês anterior: R$ {{ despesa_mes_anterior }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cartoes-wrap">
+            <div class="dash-coluna">
+                <h2 class="titulo titulo-dashboard">Últimas compras</h2>
+
+                {% if lista_despesas|length != 0 %}
+                        {% for compra in lista_despesas %}
+                            <div class="cartao dashboard-description">
+                                <p>{{ compra.get_insumo().nome }} - {{ compra.data.strftime('%d/%m/%Y') }} </p>
+                                <span class="material-icons dashboard-span">description</span>
+                            </div>
+                        {% endfor %}
+                {% else %}
+                    <div class="cartao dashboard-description">
+                        <p>Você ainda não realizou nenhuma compra</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="dash-coluna">
+                <h2 class="titulo titulo-dashboard">Maiores lucros este mês</h2>
+            
+                {% if lista_lucros|length != 0 %}
+                    {% for venda in lista_lucros %}
+                        <div class="cartao dashboard-description">
+                            <p>{{ venda.get_produto().nome }} - R$ {{ '{:.2f}'.format(venda.valor_total).replace('.', ',') }} </p>
+                            <span class="material-icons dashboard-span">description</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="cartao dashboard-description">
+                        <p>Você ainda não realizou nenhuma venda este mês</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+
+    {% else %}
+        <div class="cartao dashboard-description">
+            <p class="negrito">Seu painel será criado quando registrar sua propriedade</p> 
+        </div>
+        <a href="{{ url_for('propriedades_cadastro') }}" class="botao  texto-botao-branco verde">Registrar propriedade</a>
+    {% endif %}
+    
 {% endblock corpo %}

@@ -18,13 +18,15 @@
 <div class="cartao">
     <form class="formulario-interno" action="{{ url_for('fornecedor_busca_resultado') }}" method="get">
         <div class="form-wrapper">
-            <div>
-                <label for="nome">Nome:</label>
-                <input type="text" name="nome" id="nome" autocomplete="off">
-            </div>
-            <div>
-                <label for="contato">Contato</label>
-                <input type="text" name="contato" id="contato" autocomplete="off">
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="nome" id="nome" autocomplete="off" value="{{ nome }}">
+                </div>
+                <div>
+                    <label for="contato">Contato:</label>
+                    <input type="text" name="contato" id="contato" autocomplete="off" value="{{ contato }}">
+                </div>
             </div>
             <button>{{ botao }}</button>
         </div>
@@ -33,36 +35,40 @@
 
 {% if fornecedores %}
     {% for fornecedor in fornecedores %}
-    <div class="cartao minicard">
-        <div>
-            <p class="minicard-titulo">{{ fornecedor.nome }}</p>
-            <p class="minicard-subtitulo">{{ fornecedor.contato }}</p>
-        </div>
-        <div>
-            <span class="material-icons minicard-icon">description</span>
-        </div>
-    </div>
+        <a href="{{ url_for('fornecedor_detalhes', fornecedor_id=fornecedor.id) }}">
+            <div class="cartao minicard">
+                <div>
+                    <p class="minicard-titulo">{{ fornecedor.nome }}</p>
+                    <p class="minicard-subtitulo">{{ fornecedor.contato }}</p>
+                </div>
+                <div>
+                    <span class="material-icons minicard-icon">description</span>
+                </div>
+            </div>
+        </a>
     {% endfor %}
 {% endif %}
 
 {% if pages %}
     {% for resultado in pages.items %}
-        <div class="cartao minicard">
-            <div>
-                <p class="minicard-titulo">{{ resultado.nome }}</p>
-                <p class="minicard-subtitulo">{{ resultado.contato }}</p>
+        <a href="{{ url_for('fornecedor_detalhes', fornecedor_id=fornecedor.id) }}">
+            <div class="cartao minicard">
+                <div>
+                    <p class="minicard-titulo">{{ fornecedor.nome }}</p>
+                    <p class="minicard-subtitulo">{{ fornecedor.contato }}</p>
+                </div>
+                <div>
+                    <span class="material-icons minicard-icon">description</span>
+                </div>
             </div>
-            <div>
-                <span class="material-icons minicard-icon">description</span>
-            </div>
-        </div>
+        </a>
     {% endfor %}
     {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
             {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num, nome=nome, contato=contato) }}">{{ page_num }}</a>
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num, nome=nome, contato=contato) }}">{{ page_num }}</a>
             {% endif %}
         {% else %}
             ...

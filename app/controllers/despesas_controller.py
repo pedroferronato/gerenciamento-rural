@@ -22,18 +22,18 @@ def despesa():
 @login_required
 def despesas_compra():
     form = CompraForm()
-
     selecione = [(0, "Selecione")]
 
     fornecedores = Movimentador.query.filter_by(produtor_id=current_user.id, tipo="Fornecedor").all()
-    fornecedores_escolhas = selecione + [(fornecedor.id, fornecedor.nome) for fornecedor in fornecedores]
-    form.fornecedor.choices = fornecedores_escolhas
 
     finalidades = selecione + [(1, "Cultivo"), (2, "Fertilização"), (3, "Defensivo"), (4, "Manutenção")]
     form.finalidade.choices = finalidades
 
     if form.validate_on_submit():
-        propriedade = Propriedade.query.filter_by(produtor_id=current_user.id).first()
+        propriedade = Propriedade.query.filter(
+            Propriedade.produtor_id == current_user.id,
+            Propriedade.ativa == True
+        ).first()
         if not propriedade:
             flash("Você precisa cadastrar sua propriedade para registrar compras", 'flash-alerta')
             return redirect(url_for('despesas_compra'))
@@ -56,7 +56,14 @@ def despesas_compra():
             flash("Fornecedor não encontrado", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
-        if form.data.data < date(2010, 1, 1):
+        try:
+            if form.data.data:
+                datetime.strptime(str(form.data.data), "%d/%m/%Y").date()
+        except:
+            flash("Data não existe", 'flash-alerta')
+            return redirect(url_for('producoes_estoque'))
+
+        if datetime.strptime(form.data.data, '%d/%m/%Y').date() < date(2010, 1, 1):
             flash("Data muito antiga", 'flash-falha')
             return redirect(url_for('despesas_compra'))
 
@@ -78,7 +85,7 @@ def despesas_compra():
             db.session.refresh(insumo)
             compra = Compra(
                 propriedade_id = propriedade.id,
-                data = form.data.data,
+                data = datetime.strptime(form.data.data, '%d/%m/%Y').date(),
                 insumo_id = insumo.id,
                 movimentador_id = fornecedor_id,
                 desconto = form.desconto.data
@@ -114,14 +121,33 @@ def despesas_compra_historico_resultado():
 
     data_inicio = request.args.get('data_inicio')
     data_final = request.args.get('data_final')
-    fornecedor = request.args.get('data-fornecedor')
-    filtros_forn = [
-            Movimentador.tipo == "Fornecedor",
-            Movimentador.nome == fornecedor ,
-            Movimentador.produtor_id == current_user.id
-        ]
-    fornecedor = Movimentador.query.filter(*filtros_forn).first().id
+    fornecedor = request.args.get('data_fornecedor')
 
+    try:
+        if form.data_inicio.data:
+            datetime.strptime(str(form.data_inicio.data), "%d/%m/%Y").date()
+        if form.data_final.data:
+            datetime.strptime(str(form.data_final.data), "%d/%m/%Y").date()
+    except:
+        flash("Data não existe", 'flash-alerta')
+        return redirect(url_for('producoes_estoque'))
+
+    if data_inicio:
+        form.data_inicio.data = data_inicio
+
+    if data_final:
+        form.data_final.data = data_final
+
+    fornecedor_busca = ""
+    if fornecedor:
+        fornecedor_busca = fornecedor
+        filtros_forn = [
+                Movimentador.tipo == "Fornecedor",
+                Movimentador.nome == fornecedor ,
+                Movimentador.produtor_id == current_user.id
+            ]
+        fornecedor = Movimentador.query.filter(*filtros_forn).first().id
+    
     page = request.args.get('page', 1, type=int)
 
     filtros = []
@@ -157,7 +183,7 @@ def despesas_compra_historico_resultado():
 
     pages = compras.paginate(page=page, per_page=5)
 
-    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", pages=pages, fornecedores=setup_formulario_buscar())
+    return render_template('compras_historico.html', form=form, botao="Buscar no histórico", pages=pages, fornecedores=setup_formulario_buscar(), fornecedor_busca=fornecedor_busca)
 
 
 @application.route('/compra/<compra_id>')

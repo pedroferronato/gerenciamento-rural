@@ -19,91 +19,89 @@
     <form class="formulario-interno" action="{{ url_for('venda_adicionar') }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
-            <div>
-                {{ form.insumo.label }}
-                {% if form.insumo.errors %}
-                    {{ form.insumo(class="input-error") }}
-                    {% for error in form.insumo.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.insumo }}
-                {% endif %}
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="data-fornecedor">Cliente: *</label>
+                    <input autocomplete="off" name="data-cliente" id="data-cliente" list="cliente" 
+                    placeholder="Busque aqui">
+                    <datalist name="cliente" id="cliente">
+                        {% for cliente in clientes %}
+                            <option value="{{ cliente.id }} - {{ cliente.nome }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div>
+                    <label for="data-fornecedor">Produto: *</label>
+                    <input autocomplete="off" name="data-produto" id="data-produto" list="produto" 
+                    placeholder="Busque aqui">
+                    <datalist name="produto" id="produto">
+                        {% for produto in produtos %}
+                            <option value="{{ produto.id }} - {{ produto.nome }}">{{ produto.quantidade_formatada() }}</option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div>
+                    <label for="{{ form.data.label.field_id }}">{{ form.data.label.text }} *</label>
+                    {% if form.data.errors %}
+                        {{ form.data(class="input-error campo-data") }}
+                        {% for error in form.data.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.data(class="campo-data") }}
+                    {% endif %}
+                </div>
             </div>
-            <div>
-                <label for="data-fornecedor">Cliente:</label>
-                <input autocomplete="off" name="data-cliente" id="data-cliente" list="cliente" 
-                placeholder="Busque aqui">
-                <datalist name="cliente" id="cliente">
-                    {% for cliente in clientes %}
-                        <option value="{{ cliente.id }} - {{ cliente.nome }}"></option>
-                    {% endfor %}
-                </datalist>
+            
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="{{ form.valor_unitario.label.field_id }}">{{ form.valor_unitario.label.text }} *</label>
+                    {% if form.valor_unitario.errors %}
+                        {{ form.valor_unitario(class="input-error") }}
+                        {% for error in form.valor_unitario.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.valor_unitario(placeholder="00.00") }}
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.quantidade.label.field_id }}">{{ form.quantidade.label.text }} *</label>
+                    {% if form.quantidade.errors %}
+                        {{ form.quantidade(class="input-error") }}
+                        {% for error in form.quantidade.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.quantidade(placeholder="0") }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.desconto.label }}
+                    {% if form.desconto.errors %}
+                        {{ form.desconto(class="input-error") }}
+                        {% for error in form.desconto.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.desconto }}
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.valor_total.label.field_id }}">{{ form.valor_total.label.text }} *</label>
+                    {% if form.valor_total.errors %}
+                        {{ form.valor_total(class="input-error") }}
+                        {% for error in form.valor_total.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.valor_total(placeholder="00.00") }}
+                    {% endif %}
+                </div>
             </div>
-            <div>
-                <label for="data-fornecedor">Produto:</label>
-                <input autocomplete="off" name="data-produto" id="data-produto" list="produto" 
-                placeholder="Busque aqui">
-                <datalist name="produto" id="produto">
-                    {% for produto in produtos %}
-                        <option value="{{ produto.id }} - {{ produto.nome }}">{{ produto.quantidade_estocada_formatada() }}</option>
-                    {% endfor %}
-                </datalist>
-            </div>
-            <div>
-                {{ form.data.label }}
-                {% if form.data.errors %}
-                    {{ form.data(class="input-error campo-data") }}
-                    {% for error in form.data.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data(class="campo-data") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.valor_unitario.label }}
-                {% if form.valor_unitario.errors %}
-                    {{ form.valor_unitario(class="input-error") }}
-                    {% for error in form.valor_unitario.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.valor_unitario(placeholder="00.00") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.quantidade.label }}
-                {% if form.quantidade.errors %}
-                    {{ form.quantidade(class="input-error") }}
-                    {% for error in form.quantidade.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.quantidade(placeholder="0") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.desconto.label }}
-                {% if form.desconto.errors %}
-                    {{ form.desconto(class="input-error") }}
-                    {% for error in form.desconto.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.desconto }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.valor_total.label }}
-                {% if form.valor_total.errors %}
-                    {{ form.valor_total(class="input-error") }}
-                    {% for error in form.valor_total.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.valor_total(placeholder="00.00") }}
-                {% endif %}
+
+            <div class="cp-obrigatorio">
+                <p>* Campo obrigatório</p>
             </div>
             <button>{{ botao }}</button>
         </div>

@@ -61,7 +61,7 @@ def test_verificar_metodo_formatacao_valor_total_extenso_insumo():
     # (Valor inválido ou gerado pela linguagem)
     # (1.00000001)
 
-    insumo = Insumo( valor_total = 11.2501 )
+    insumo = Insumo( valor_total = 11.2500001 )
 
     texto_retorno_esperado = "R$ 11.25"
 

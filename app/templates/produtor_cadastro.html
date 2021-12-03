@@ -13,25 +13,25 @@
             {% endif %}
         {% endwith %}
         <div>
-            {{ form.nome.label }}
+            <label for="{{ form.nome.label.field_id }}">{{ form.nome.label.text }} *</label>
             {% if form.nome.errors %}
                 {{ form.nome(class="input-error") }}
                 {% for error in form.nome.errors %}
                     <span class="span-erro">{{ error }}</span>
                 {% endfor %}
             {% else %}
-                {{ form.nome }}
+                {{ form.nome(autocomplete="off") }}
             {% endif %}
         </div>
         <div>
-            {{ form.login.label }}
+            <label for="{{ form.login.label.field_id }}">{{ form.login.label.text }} *</label>
             {% if form.login.errors %}
                 {{ form.login(class="input-error") }}
                 {% for error in form.login.errors %}
                     <span class="span-erro">{{ error }}</span>
                 {% endfor %}
             {% else %}
-                {{ form.login }}
+                {{ form.login(autocomplete="off") }}
             {% endif %}
         </div>
         <div>
@@ -46,7 +46,7 @@
             {% endif %}
         </div>
         <div>
-            {{ form.senha.label }}
+            <label for="{{ form.senha.label.field_id }}">{{ form.senha.label.text }} *</label>
             {% if form.senha.errors %}
                 {{ form.senha(class="input-error") }}
                 {% for error in form.senha.errors %}
@@ -57,7 +57,7 @@
             {% endif %}
         </div>
         <div>
-            {{ form.confirmar_senha.label }}
+            <label for="{{ form.confirmar_senha.label.field_id }}">{{ form.confirmar_senha.label.text }} *</label>
             {% if form.confirmar_senha.errors %}
                 {{ form.confirmar_senha(class="input-error") }}
                 {% for error in form.confirmar_senha.errors %}
@@ -66,6 +66,9 @@
             {% else %}
                 {{ form.confirmar_senha }}
             {% endif %}
+        </div>
+        <div class="cp-obrigatorio">
+            <p>* Campo obrigatório</p>
         </div>
         <button>Registrar</button>
     </div>

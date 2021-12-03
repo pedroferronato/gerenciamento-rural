@@ -21,7 +21,7 @@
             {{ form.hidden_tag() }}
             <div class="form-wrapper">
                 <div>
-                    {{ form.nome.label }}
+                    <label for="{{ form.nome.label.field_id }}">{{ form.nome.label.text }} *</label>
                     {% if form.nome.errors %}
                         {{ form.nome(class="input-error") }}
                         {% for error in form.nome.errors %}
@@ -31,38 +31,44 @@
                         {{ form.nome }}
                     {% endif %}
                 </div>
-                <div>
-                    {{ form.endereco.label }}
-                    {% if form.endereco.errors %}
-                        {{ form.endereco(class="input-error") }}
-                        {% for error in form.endereco.errors %}
-                            <span class="span-erro">{{ error }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {{ form.endereco }}
-                    {% endif %}
+                <div class="form-flex-desktop">
+                    <div>
+                        {{ form.endereco.label }}
+                        {% if form.endereco.errors %}
+                            {{ form.endereco(class="input-error") }}
+                            {% for error in form.endereco.errors %}
+                                <span class="span-erro">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.endereco }}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="area">Área: (m²)</label>
+                        {% if form.area.errors %}
+                            {{ form.area(class="input-error", placeholder="10.000") }}
+                            {% for error in form.area.errors %}
+                                <span class="span-erro">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.area(placeholder="10000") }}
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ form.contato.label }}
+                        {% if form.contato.errors %}
+                            {{ form.contato(class="input-error") }}
+                            {% for error in form.contato.errors %}
+                                <span class="span-erro">{{ error }}</span>
+                            {% endfor %}
+                        {% else %}
+                            {{ form.contato }}
+                        {% endif %}
+                    </div>
                 </div>
-                <div>
-                    {{ form.area.label }}
-                    {% if form.area.errors %}
-                        {{ form.area(class="input-error") }}
-                        {% for error in form.area.errors %}
-                            <span class="span-erro">{{ error }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {{ form.area }}
-                    {% endif %}
-                </div>
-                <div>
-                    {{ form.contato.label }}
-                    {% if form.contato.errors %}
-                        {{ form.contato(class="input-error") }}
-                        {% for error in form.contato.errors %}
-                            <span class="span-erro">{{ error }}</span>
-                        {% endfor %}
-                    {% else %}
-                        {{ form.contato }}
-                    {% endif %}
+                
+                <div class="cp-obrigatorio">
+                    <p>* Campo obrigatório</p>
                 </div>
                 <button>{{ botao }}</button>
             </div>

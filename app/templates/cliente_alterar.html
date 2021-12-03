@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block titulo %}
-    Fornecedores
+    Clientes
 {% endblock titulo %}
 
 {% block corpo %}
-<h2 class="titulo">Cadastrar fornecedor</h2>
+<h2 class="titulo">Cadastrar cliente</h2>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -16,7 +16,7 @@
 {% endwith %}
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('fornecedor_cadastro') }}" method="post">
+    <form class="formulario-interno" action="{{ url_for('cliente_alterar', cliente_id=cliente_id) }}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-wrapper">
             <div class="form-flex-desktop">

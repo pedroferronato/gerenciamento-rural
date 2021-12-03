@@ -20,7 +20,7 @@
                     <span class="span-erro">{{ error }}</span>
                 {% endfor %}
             {% else %}
-                {{ form.usuario }}
+                {{ form.usuario(autocomplete="off") }}
             {% endif %}
         </div>
         <div>
@@ -37,6 +37,5 @@
         <button>Entrar</button>
     </div>
 </form>
-<a href="#">Esqueceu a senha?</a>
 <a href="{{ url_for('criar_produtor') }}">Criar uma nova conta</a>
 {% endblock corpo %}

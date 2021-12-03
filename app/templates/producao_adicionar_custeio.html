@@ -39,7 +39,7 @@ Produções
         method="post">
         <div class="form-wrapper">
             <div>
-                <label for="data-insumo">Produto:</label>
+                <label for="data-insumo">Produto: *</label>
                 <input autocomplete="off" name="data-insumo" id="data-insumo" list="produto" placeholder="Busque aqui">
                 <datalist name="produto" id="produto">
                     {% for produto in insumos %}
@@ -49,24 +49,15 @@ Produções
                 </datalist>
             </div>
             <div>
-                <label for="quantidade">Quantidade:</label>
+                <label for="quantidade">Quantidade: *</label>
                 <input autocomplete="off" type="number" name="quantidade" id="quantidade">
             </div>
             <div>
-                <label for="data">Data:</label>
+                <label for="data">Data: *</label>
                 <input autocomplete="off" class="campo-data" name="data" id="data">
             </div>
-            <div>
-                <label for="data">Valor unitário:</label>
-                <input autocomplete="off" name="unitario" id="unitario">
-            </div>
-            <div>
-                <label for="data">Validade:</label>
-                <input autocomplete="off" class="campo-data" name="validade" id="validade">
-            </div>
-            <div>
-                <label for="data">Unidade de medida:</label>
-                <input autocomplete="off" name="medida" id="medida">
+            <div class="cp-obrigatorio">
+                <p>* Campo obrigatório</p>
             </div>
             <button>{{ botao }}</button>
         </div>

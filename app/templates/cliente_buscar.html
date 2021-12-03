@@ -16,38 +16,43 @@
 {% endwith %}
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('cliente_busca') }}" method="get">
-        {{ form.hidden_tag() }}
+    <form class="formulario-interno" action="{{ url_for('cliente_busca_resultado') }}" method="get">
         <div class="form-wrapper">
-            <div>
-                {{ form.nome.label }}
-                {% if form.nome.errors %}
-                    {{ form.nome(class="input-error") }}
-                    {% for error in form.nome.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.nome }}
-                {% endif %}
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="nome">Nome:</label>
+                    <input type="text" name="nome" id="nome" autocomplete="off" value="{{ nome }}">
+                </div>
+                <div>
+                    <label for="contato">Contato:</label>
+                    <input type="text" name="contato" id="contato" autocomplete="off" value="{{ contato }}">
+                </div>
             </div>
-            <div>
-                {{ form.contato.label }}
-                {% if form.contato.errors %}
-                    {{ form.contato(class="input-error") }}
-                    {% for error in form.contato.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.contato }}
-                {% endif %}
-            </div>
+        
             <button>{{ botao }}</button>
         </div>
     </form>
 </div>
 
+{% if clientes %}
+    {% for cliente in clientes %}
+        <a href="{{ url_for('cliente_detalhes', cliente_id=cliente.id) }}">
+            <div class="cartao minicard">
+                <div>
+                    <p class="minicard-titulo">{{ cliente.nome }}</p>
+                    <p class="minicard-subtitulo">{{ cliente.contato }}</p>
+                </div>
+                <div>
+                    <span class="material-icons minicard-icon">description</span>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+{% endif %}
+
 {% if pages %}
     {% for resultado in pages.items %}
+    <a href="{{ url_for('cliente_detalhes', cliente_id=cliente.id) }}">
         <div class="cartao minicard">
             <div>
                 <p class="minicard-titulo">{{ resultado.nome }}</p>
@@ -57,18 +62,21 @@
                 <span class="material-icons minicard-icon">description</span>
             </div>
         </div>
+    </a>
     {% endfor %}
-    {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-            {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+    <div class="paginador">
+        {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if pages.page == page_num %}
+                    <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca_resultado', page=page_num, nome=nome, contato=contato) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="paginador-botao" href="{{ url_for('cliente_busca_resultado', page=page_num, nome=nome, contato=contato) }}">{{ page_num }}</a>
+                {% endif %}
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                ...
             {% endif %}
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endif %}
 
 
