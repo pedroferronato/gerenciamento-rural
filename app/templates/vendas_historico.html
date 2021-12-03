@@ -18,14 +18,17 @@
 <div class="cartao">
     <form class="formulario-interno" action="{{ url_for('venda_historico_busca') }}" method="get">
         <div class="form-wrapper">
-            <div>
-                <label for="dataInicial">Data inicial:</label>
-                <input class="campo-data" name="data_inicio" id="dataInicial">
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="dataInicial">Data inicial:</label>
+                    <input class="campo-data" name="data_inicio" id="dataInicial" autocomplete="off" value="{{ data_inicio }}">
+                </div>
+                <div>
+                    <label for="dataFinal">Data final:</label>
+                    <input class="campo-data" name="data_final" id="dataFinal" autocomplete="off" value="{{ data_final }}">
+                </div>
             </div>
-            <div>
-                <label for="dataFinal">Data final:</label>
-                <input class="campo-data" name="data_final" id="dataFinal">
-            </div>
+            
             <button>{{ botao }}</button>
         </div>
     </form>
@@ -33,38 +36,42 @@
 
 {% if vendas %}
     {% for venda in vendas %}
-    <div class="cartao minicard">
-        <div>
-            <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
-            <p class="minicard-subtitulo">{{ compra.data.strftime('%d/%m/%Y') }}</p>
-            <p class="minicard-subtitulo">{{ compra.get_insumo().valor_final_formatado() }}</p>
-        </div>
-        <div>
-            <span class="material-icons minicard-icon">description</span>
-        </div>
-    </div>
-    {% endfor %}
-{% endif %}
-
-{% if pages %}
-    {% for resultado in pages.items %}
+    <a href="{{ url_for('venda_detalhes', venda_id=venda.id) }}">
         <div class="cartao minicard">
             <div>
-                <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
-                <p class="minicard-subtitulo">{{ compra.data.strftime('%d/%m/%Y') }}</p>
-                <p class="minicard-subtitulo">{{ compra.get_insumo().valor_final_formatado() }}</p>
+                <p class="minicard-titulo">{{ venda.get_cliente().nome }}</p>
+                <p class="minicard-subtitulo">{{ venda.get_produto().nome }}</p>
+                <p class="minicard-subtitulo">{{ venda.valor_final_formatado() }}</p>
             </div>
             <div>
                 <span class="material-icons minicard-icon">description</span>
             </div>
         </div>
+    </a>
+    {% endfor %}
+{% endif %}
+
+{% if pages %}
+    {% for resultado in pages.items %}
+    <a href="{{ url_for('venda_detalhes', venda_id=venda.id) }}">
+        <div class="cartao minicard">
+            <div>
+                <p class="minicard-titulo">{{ venda.get_cliente().nome }}</p>
+                <p class="minicard-subtitulo">{{ venda.get_produto().nome }}</p>
+                <p class="minicard-subtitulo">{{ venda.valor_final_formatado() }}</p>
+            </div>
+            <div>
+                <span class="material-icons minicard-icon">description</span>
+            </div>
+        </div>
+    </a>
     {% endfor %}
     {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
         {% if page_num %}
             {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('venda_historico_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao paginador-atual" href="{{ url_for('venda_historico_busca', page=page_num, data_inicio=data_inicio, data_final=data_final) }}">{{ page_num }}</a>
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('venda_historico_busca', page=page_num) }}">{{ page_num }}</a>
+                <a class="paginador-botao" href="{{ url_for('venda_historico_busca', page=page_num, data_inicio=data_inicio, data_final=data_final) }}">{{ page_num }}</a>
             {% endif %}
         {% else %}
             ...

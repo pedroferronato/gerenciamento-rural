@@ -13,6 +13,7 @@ class Venda(db.Model):
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), nullable=False, primary_key=True)
     movimentador_id = db.Column(db.Integer, db.ForeignKey('movimentador.id'), nullable=False, primary_key=True)
     quantidade = db.Column(db.Float, nullable=False)
+    desconto = db.Column(db.String(50))
     valor_unitario = db.Column(db.Float, nullable=False)
 
 

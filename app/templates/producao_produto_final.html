@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Produções
+{% endblock titulo %}
+
+{% block corpo %}
+<h2 class="titulo">Atualizar produto final</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<p class="flashed-alert {{ category }}">{{ message }}</p>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div class="cartao cartao-detalhes">
+    <p class="detalhes-titulo">{{ producao.nome }}</p>
+
+    <label>Data de início:</label>
+    <p class="detalhes-informacoes">{{ producao.data.strftime('%d/%m/%Y') }}</p>
+
+</div>
+
+<div class="cartao">
+    <form class="formulario-interno" action="{{ url_for('producao_alterar_produto_final', producao_id=producao.id) }}"
+        method="post">
+        <div class="form-wrapper">
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="nome">Nome: </label>
+                    {% if producao.produto_esperado  %}
+                        <input autocomplete="off" name="nome" id="nome" value="{{ producao.produto_esperado }}">
+                    {% else %}
+                        <input autocomplete="off" name="nome" id="nome" value="{{ producao.get_insumo_base().nome }}">
+                    {% endif %}
+                </div>
+                <div>
+                    <label for="quantidade">Quantidade:</label>
+                    <input autocomplete="off" type="number" name="quantidade" id="quantidade" value="{{ producao.quantidade_atual_formatada() }}">
+                </div>
+            </div>
+            <button>{{ botao }}</button>
+        </div>
+    </form>
+</div>
+{% endblock corpo %}

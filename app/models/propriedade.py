@@ -9,3 +9,4 @@ class Propriedade(db.Model):
     endereco = db.Column(db.String(200), nullable=False)
     area = db.Column(db.String(20))
     contato = db.Column(db.String(25))
+    ativa = db.Column(db.Boolean(), default=True)

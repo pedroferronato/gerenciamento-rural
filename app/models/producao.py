@@ -2,6 +2,7 @@ from app import db
 from app.models.insumo import Insumo
 from app.models.producao_insumo import ProducaoInsumo
 from app.models.producao_produto import Coleta
+from app.models.produto import Produto
 
 
 class Producao(db.Model):
@@ -12,6 +13,7 @@ class Producao(db.Model):
     nome = db.Column(db.String(200), nullable=False)
     quantidade = db.Column(db.Float)
     quantidade_atual = db.Column(db.Float)
+    produto_esperado = db.Column(db.String(200))
     ativa = db.Column(db.Boolean(), default=True)
     data = db.Column(db.Date(), nullable=False)
     data_coleta = db.Column(db.Date())
@@ -56,3 +58,9 @@ class Producao(db.Model):
         if self.quantidade.is_integer():
             return "{}".format(int(self.quantidade))
         return "{}".format(self.quantidade)
+
+
+    def quantidade_atual_formatada(self):
+        if self.quantidade_atual.is_integer():
+            return "{}".format(int(self.quantidade_atual))
+        return "{}".format(self.quantidade_atual)

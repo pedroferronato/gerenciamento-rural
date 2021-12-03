@@ -17,30 +17,32 @@
 
 <div class="cartao">
     <form class="formulario-interno" action="{{ url_for('producoes_estoque') }}" method="get">
-        {{ form.hidden_tag() }}
         <div class="form-wrapper">
-            <div>
-                {{ form.nome.label }}
-                {% if form.nome.errors %}
-                    {{ form.nome(class="input-error") }}
-                    {% for error in form.nome.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.nome }}
-                {% endif %}
+            <div class="form-flex-desktop">
+                <div>
+                    {{ form.nome.label }}
+                    {% if form.nome.errors %}
+                        {{ form.nome(class="input-error") }}
+                        {% for error in form.nome.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.nome }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.validade.label }}
+                    {% if form.validade.errors %}
+                        {{ form.validade(class="input-error campo-data") }}
+                        {% for error in form.validade.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.validade(class="campo-data") }}
+                    {% endif %}
+                </div>
             </div>
-            <div>
-                {{ form.validade.label }}
-                {% if form.validade.errors %}
-                    {{ form.validade(class="input-error") }}
-                    {% for error in form.validade.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.validade }}
-                {% endif %}
-            </div>
+            
             <button>{{ botao }}</button>
         </div>
     </form>
@@ -48,45 +50,61 @@
 
 {% if produtos %}
     {% for produto in produtos %}
-    <div class="cartao minicard">
-        <div>
-            <p class="minicard-titulo">{{ produto.nome }}</p>
-            {% if produto.validade %}
-                <p class="minicard-subtitulo">Validade: {{ produto.validade }}</p>
-            {% endif %}
-            <p class="minicard-subtitulo">Quantidade: {{ produto.quantidade }}</p>
-        </div>
-        <div>
-            <span class="material-icons minicard-icon">description</span>
-        </div>
-    </div>
-    {% endfor %}
-{% endif %}
-
-{% if pages %}
-    {% for resultado in pages.items %}
+    <a href="{{ url_for('producao_detalhes', producao_id=produto.producao_id) }}">
         <div class="cartao minicard">
             <div>
-                <p class="minicard-titulo">{{ resultado.nome }}</p>
-                <p class="minicard-subtitulo">{{ resultado.contato }}</p>
+                <p class="minicard-titulo">{{ produto.nome }}</p>
+                {% if produto.validade %}
+                    <p class="minicard-subtitulo">Validade: {{ produto.validade.strftime('%d/%m/%Y') }}</p>
+                {% endif %}
+                <p class="minicard-subtitulo">Quantidade: {{ produto.quantidade }}</p>
             </div>
             <div>
                 <span class="material-icons minicard-icon">description</span>
             </div>
         </div>
+    </a>
     {% endfor %}
-    {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-            {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+{% endif %}
+
+{% if pages %}
+    {% for resultado in pages.items %}
+        <a href="{{ url_for('producao_detalhes', producao_id=produto.producao_id) }}">
+            <div class="cartao minicard">
+                <div>
+                    <p class="minicard-titulo">{{ produto.nome }}</p>
+                    {% if produto.validade %}
+                        <p class="minicard-subtitulo">Validade: {{ produto.validade.strftime('%d/%m/%Y') }}</p>
+                    {% endif %}
+                    <p class="minicard-subtitulo">Quantidade: {{ produto.quantidade }}</p>
+                </div>
+                <div>
+                    <span class="material-icons minicard-icon">description</span>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    <div class="paginador">
+        {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if pages.page == page_num %}
+                    <a class="paginador-botao paginador-atual" href="{{ url_for('producoes_estoque', page=page_num) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="paginador-botao" href="{{ url_for('producoes_estoque', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                ...
             {% endif %}
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endif %}
 
 
 {% endblock corpo %}
+
+{% block codigo %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="{{ url_for('static', filename='js/mascaras.js') }}"></script>
+{% endblock codigo %}

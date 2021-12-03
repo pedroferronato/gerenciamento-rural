@@ -7,4 +7,5 @@ from flask_login import login_required, current_user
 @application.route('/insumo/detalhe/<insumo_id>')
 @login_required
 def insumo_detalhe(insumo_id):
-    return render_template('insumo_detalhes.html')
+    insumo = Insumo.query.filter_by(id=insumo_id).first()
+    return render_template('insumo_detalhes.html', insumo=insumo)

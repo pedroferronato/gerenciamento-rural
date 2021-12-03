@@ -42,33 +42,89 @@ def cliente_cadastro():
     return render_template('cliente_cadastro.html', form=form, botao="Cadastrar novo cliente")
 
 
+@application.route('/cliente/alterar/<cliente_id>', methods=['GET', 'POST'])
+@login_required
+def cliente_alterar(cliente_id):
+    cliente = Movimentador.query.filter(
+            Movimentador.tipo == "Cliente",
+            Movimentador.id == cliente_id
+        ).first()
+
+    form = MovimentadorForm()
+    if request.method == "GET":
+        form.nome.data = cliente.nome
+        form.endereco.data = cliente.endereco
+        form.contato.data = cliente.contato
+    if request.method == "POST":
+        if form.validate_on_submit():
+            cliente.nome = form.nome.data
+            cliente.endereco = form.endereco.data
+            cliente.contato = form.contato.data
+            try:
+                db.session.add(cliente)
+                db.session.commit()
+                flash(f'Cliente {cliente.nome} alterado com sucesso', 'flash-sucesso')
+                return redirect(url_for('cliente'))
+            except:
+                flash("Falha ao atualizar cliente", 'flash-falha')
+                return redirect(url_for('cliente', cliente_id=cliente_id))
+    return render_template('cliente_alterar.html', form=form, cliente_id=cliente_id, botao="Atualizar cadastro")
+
+
+@application.route('/cliente/excluir/<cliente_id>')
+@login_required
+def cliente_deletar(cliente_id):
+    cliente = Movimentador.query.filter(
+        Movimentador.tipo == "Cliente",
+        Movimentador.id == cliente_id
+    ).first()
+    try:
+        db.session.delete(cliente)
+        db.session.commit()
+    except:
+        flash("Falha ao remover cliente", 'flash-falha')
+        return redirect(url_for('cliente'))
+    flash("Cliente removido com sucesso", 'flash-sucesso')
+    return redirect(url_for('cliente'))
+
+
+@application.route('/cliente/detalhes/<cliente_id>')
+@login_required
+def cliente_detalhes(cliente_id):
+    cliente = Movimentador.query.filter_by(id=cliente_id).first()
+    return render_template('cliente_detalhes.html', cliente=cliente)
+
+
 @application.route('/cliente/busca')
 @login_required
 def cliente_busca():
-    form = MovimentadorForm()
-    page = request.args.get('page', 1, type=int)
-    if form.validate_on_submit():
-        filtros = []
-
-        if form.contato.data:
-            filtros.append(Movimentador.contato.like('%{}%'.format(form.contato.data)))
-        filtros.append(Movimentador.nome.like('%{}%'.format(form.endereco.data)))
-
-        resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc())
-
-        if len(resultado.all()) <= 0:
-            flash('Nenhum cliente encontrado', 'flash-alerta')
-            return redirect(url_for('cliente_busca'))
-
-        pages = resultado.paginate(page=page, per_page=5)
-
-        return render_template('cliente_buscar.html', form=form, botao="Buscar cliente", pages=pages)
-
-    return render_template('cliente_buscar.html', form=form, botao="Buscar cliente")
+    return render_template('cliente_buscar.html', botao="Buscar cliente")
 
 
-@application.route('/cliente/maiores')
+@application.route('/cliente/busca/resultado')
 @login_required
-def cliente_maiores():
-    # clientes = Movimentador.query.filter
-    return render_template('cliente_maiores_clientes.html')
+def cliente_busca_resultado():
+    nome = request.args.get('nome')
+    contato = request.args.get('contato')
+    page = request.args.get('page', 1, type=int)
+    
+    filtros = [
+        Movimentador.tipo == "Cliente"
+    ]
+    if contato:
+        filtros.append(Movimentador.contato.like('%{}%'.format(contato)))
+    filtros.append(Movimentador.nome.like('%{}%'.format(nome)))
+
+    resultado = Movimentador.query.filter(*filtros).limit(25).from_self().order_by(Movimentador.nome.asc())
+
+    print(resultado.all())
+    if len(resultado.all()) <= 0:
+        flash('Nenhum cliente encontrado', 'flash-alerta')
+        return redirect(url_for('cliente_busca'))
+
+    if len(resultado.all()) < 10:
+        return render_template('cliente_buscar.html', botao="Buscar cliente", clientes=resultado.all())
+    
+    pages = resultado.paginate(page=page, per_page=5)
+
+    return render_template('cliente_buscar.html', botao="Buscar cliente", pages=pages, nome=nome, contato=contato)

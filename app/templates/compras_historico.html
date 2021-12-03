@@ -18,38 +18,41 @@
 <div class="cartao">
     <form class="formulario-interno" action="{{ url_for('despesas_compra_historico_resultado') }}" method="get">
         <div class="form-wrapper">
-            <div>
-                <label for="data-fornecedor">Fornecedor:</label>
-                <input autocomplete="off" name="data-fornecedor" id="data-fornecedor" list="forne" 
-                placeholder="Busque aqui">
-                <datalist name="forne" id="forne">
-                    {% for fornecedor in fornecedores %}
-                        <option value="{{ fornecedor.nome }}"></option>
-                    {% endfor %}
-                </datalist>
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="data_fornecedor">Fornecedor:</label>
+                    <input autocomplete="off" name="data_fornecedor" id="data_fornecedor" list="forne" 
+                    placeholder="Busque aqui", value="{{ fornecedor_busca }}">
+                    <datalist name="forne" id="forne">
+                        {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.nome }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+                <div>
+                    {{ form.data_inicio.label }}
+                    {% if form.data_inicio.errors %}
+                        {{ form.data_inicio(class="input-error campo-data") }}
+                        {% for error in form.data_inicio.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.data_inicio(class="campo-data") }}
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.data_final.label }}
+                    {% if form.data_final.errors %}
+                        {{ form.data_final(class="input-error campo-data") }}
+                        {% for error in form.data_final.errors %}
+                            <span class="span-erro">{{ error }}</span>
+                        {% endfor %}
+                    {% else %}
+                        {{ form.data_final(class="campo-data") }}
+                    {% endif %}
+                </div>
             </div>
-            <div>
-                {{ form.data_inicio.label }}
-                {% if form.data_inicio.errors %}
-                    {{ form.data_inicio(class="input-error campo-data") }}
-                    {% for error in form.data_inicio.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data_inicio(class="campo-data") }}
-                {% endif %}
-            </div>
-            <div>
-                {{ form.data_final.label }}
-                {% if form.data_final.errors %}
-                    {{ form.data_final(class="input-error campo-data") }}
-                    {% for error in form.data_final.errors %}
-                        <span class="span-erro">{{ error }}</span>
-                    {% endfor %}
-                {% else %}
-                    {{ form.data_final(class="campo-data") }}
-                {% endif %}
-            </div>
+            
             <button>{{ botao }}</button>
         </div>
     </form>
@@ -57,21 +60,7 @@
 
 {% if compras %}
     {% for compra in compras %}
-    <div class="cartao minicard">
-        <div>
-            <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
-            <p class="minicard-subtitulo">{{ compra.data.strftime('%d/%m/%Y') }}</p>
-            <p class="minicard-subtitulo">{{ compra.get_insumo().valor_final_formatado() }}</p>
-        </div>
-        <div>
-            <span class="material-icons minicard-icon">description</span>
-        </div>
-    </div>
-    {% endfor %}
-{% endif %}
-
-{% if pages %}
-    {% for compra in pages.items %}
+    <a href="{{ url_for('compra_detalhe', compra_id=compra.id) }}">
         <div class="cartao minicard">
             <div>
                 <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
@@ -82,18 +71,38 @@
                 <span class="material-icons minicard-icon">description</span>
             </div>
         </div>
+    </a>
     {% endfor %}
-    {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-        {% if page_num %}
-            {% if pages.page == page_num %}
-                <a class="paginador-botao paginador-atual" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+{% endif %}
+
+{% if pages %}
+    {% for compra in pages.items %}
+    <a href="{{ url_for('compra_detalhe', compra_id=compra.id) }}">
+        <div class="cartao minicard">
+            <div>
+                <p class="minicard-titulo">{{ compra.get_insumo().nome }}</p>
+                <p class="minicard-subtitulo">{{ compra.data.strftime('%d/%m/%Y') }}</p>
+                <p class="minicard-subtitulo">{{ compra.get_insumo().valor_final_formatado() }}</p>
+            </div>
+            <div>
+                <span class="material-icons minicard-icon">description</span>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    <div class="paginador">
+        {% for page_num in pages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page_num %}
+                {% if pages.page == page_num %}
+                    <a class="paginador-botao paginador-atual" href="{{ url_for('despesas_compra_historico_resultado', page=page_num, data_fornecedor=fornecedor_busca, data_inicio=form.data_inicio.data, data_final=form.data_final.data) }}">{{ page_num }}</a>
+                {% else %}
+                    <a class="paginador-botao" href="{{ url_for('despesas_compra_historico_resultado', page=page_num, data_fornecedor=fornecedor_busca, data_inicio=form.data_inicio.data, data_final=form.data_final.data) }}">{{ page_num }}</a>
+                {% endif %}
             {% else %}
-                <a class="paginador-botao" href="{{ url_for('cliente_busca', page=page_num) }}">{{ page_num }}</a>
+                ...
             {% endif %}
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
+    </div>
 {% endif %}
 
 

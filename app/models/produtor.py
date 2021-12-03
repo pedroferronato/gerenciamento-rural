@@ -30,4 +30,7 @@ class Produtor(db.Model, UserMixin):
 
     
     def get_propriedade(self):
-        return Propriedade.query.filter_by(produtor_id=self.id)
+        return Propriedade.query.filter(
+            Propriedade.ativa == True,
+            Propriedade.produtor_id == self.id
+        ).first()

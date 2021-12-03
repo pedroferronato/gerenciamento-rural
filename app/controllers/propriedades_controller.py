@@ -26,7 +26,7 @@ def propriedades_cadastro():
         ]
 
         verificacao_propriedade_produtor = Propriedade.query.filter(*filtros).first()
-
+        print(verificacao_propriedade_produtor)
         if verificacao_propriedade_produtor:
             flash('Você já registrou esta propriedade', 'flash-alerta')
             return redirect(url_for('propriedades_cadastro'))
@@ -39,7 +39,8 @@ def propriedades_cadastro():
             nome = form.nome.data,
             endereco = form.endereco.data,
             area = form.area.data,
-            contato = form.contato.data
+            contato = form.contato.data,
+            ativa = True
         )
 
         try:
@@ -57,14 +58,20 @@ def propriedades_cadastro():
 @application.route('/propriedades/detalhes/<propriedade_id>')
 @login_required
 def propriedades_detalhes(propriedade_id):
-    propriedade = Propriedade.query.filter_by(id=propriedade_id).first()
+    propriedade = Propriedade.query.filter(
+        Propriedade.ativa == True,
+        Propriedade.id == propriedade_id
+    ).first()
     return render_template('propriedade_detalhes.html', propriedade=propriedade)
 
 
 @application.route('/propriedades/alterar/<propriedade_id>', methods=["GET", "POST"])
 @login_required
 def propriedades_atualizar(propriedade_id):
-    propriedade = Propriedade.query.filter_by(id=propriedade_id).first()
+    propriedade = Propriedade.query.filter(
+        Propriedade.ativa == True,
+        Propriedade.id == propriedade_id
+    ).first()
     form = PropriedadeCadastroForm()
     if request.method == "GET":
         form.nome.data = propriedade.nome
@@ -76,9 +83,9 @@ def propriedades_atualizar(propriedade_id):
             if not form.contato.data:
                 form.contato.data = current_user.contato
 
-            propriedade.nome = form.nome.data,
-            propriedade.endereco = form.endereco.data,
-            propriedade.area = form.area.data,
+            propriedade.nome = form.nome.data
+            propriedade.endereco = form.endereco.data
+            propriedade.area = form.area.data
             propriedade.contato = form.contato.data
 
             try:
@@ -96,9 +103,13 @@ def propriedades_atualizar(propriedade_id):
 @application.route('/propriedades/excluir/<propriedade_id>')
 @login_required
 def propriedades_excluir(propriedade_id):
-    propriedade = Propriedade.query.filter_by(id=propriedade_id).first()
+    propriedade = Propriedade.query.filter(
+        Propriedade.ativa == True,
+        Propriedade.id == propriedade_id
+    ).first()
     try:
-        db.session.delete(propriedade)
+        propriedade.ativa == False
+        db.session.add(propriedade)
         db.session.commit()
     except:
         flash("Falha ao excluir da base de dados", 'flash-falha')

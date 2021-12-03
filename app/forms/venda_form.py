@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Length
 
 
 class VendaForm(FlaskForm):
-    data = DateField('Data da venda:', format='%d/%m/%Y', default=date.today(), validators=[DataRequired('Insira a data de venda')])
+    data = StringField('Data da venda:', default=date.today().strftime('%d/%m/%Y'), validators=[DataRequired('Insira a data de venda')])
     quantidade = FloatField('Quantidade:', validators=[DataRequired('Insira a quantidade vendida')])
     valor_total = FloatField('Valor total:', validators=[DataRequired('Insira o valor total da venda, ou deixe o cálculo automático')])
     desconto = StringField('Desconto:', validators=[Length(min=0, max=50, message="Por favor, não ultrapasse 50 caracteres")])

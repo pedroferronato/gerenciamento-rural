@@ -23,24 +23,39 @@
 </div>
 
 <div class="cartao">
-    <form class="formulario-interno" action="{{ url_for('producao_finalizar', producao_id=producao_id) }}"
+    <form class="formulario-interno" action="{{ url_for('producao_finalizar', producao_id=producao.id) }}"
         method="post">
         <div class="form-wrapper">
-            <div>
-                <label for="data">Confirme a data:</label>
-                <input autocomplete="off" class="campo-data" name="data" id="data" value="{{ data.strftime('%d/%m/%Y') }}">
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="data">Confirme a data: *</label>
+                    <input autocomplete="off" class="campo-data" name="data" id="data" value="{{ data.strftime('%d/%m/%Y') }}">
+                </div>
+                <div>
+                    <label for="validade">Validade:</label>
+                    <input autocomplete="off" class="campo-data" name="validade" id="validade">
+                </div>
             </div>
             <div>
-                <label for="data">Valor unitário:</label>
-                <input autocomplete="off" name="unitario" id="unitario">
+                <label for="nome">Produto final: *</label>
+                <input autocomplete="off" name="nome" id="nome" value="{{ producao.produto_esperado }}">
             </div>
-            <div>
-                <label for="data">Validade:</label>
-                <input autocomplete="off" class="campo-data" name="validade" id="validade">
+            <div class="form-flex-desktop">
+                <div>
+                    <label for="unitario">Valor unitário: *</label>
+                    <input autocomplete="off" name="unitario" id="unitario">
+                </div>
+                <div>
+                    <label for="quantidade">Quantidade: *</label>
+                    <input autocomplete="off" name="quantidade" id="quantidade" value="{{ producao.quantidade_atual }}">
+                </div>
+                <div>
+                    <label for="medida">Unidade de medida:</label>
+                    <input autocomplete="off" name="medida" id="medida">
+                </div>
             </div>
-            <div>
-                <label for="data">Unidade de medida:</label>
-                <input autocomplete="off" name="medida" id="medida">
+            <div class="cp-obrigatorio">
+                <p>* Campo obrigatório</p>
             </div>
             <button>{{ botao }}</button>
         </div>

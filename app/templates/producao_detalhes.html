@@ -31,18 +31,33 @@
                 <p class="detalhes-informacoes">Finalizada</p>
             {% endif %}
         </div>
-
-        <a class="botao azul texto-botao-branco" href="{{ url_for('producao_adicionar_custeio', producao_id=producao.id) }}">Adicionar custeio agrícola</a>
-
+        
         <div class="cartao cartao-detalhes">
             <label>Produto base:</label>
             <p class="detalhes-informacoes">{{ producao.get_insumo_base().nome }}</p>
             {% if producao.quantidade %}
-                <p class="detalhes-informacoes">Quantidade inicial: {{ producao.quantidade_formatada() }} {{ producao.get_insumo_base().unidade_medida }}</p>
+            <p class="detalhes-informacoes">Quantidade inicial: {{ producao.quantidade_formatada() }} {{ producao.get_insumo_base().unidade_medida }}</p>
             {% endif %}
         </div>
 
-        {% if producao.get_coletas() %}
+        <div class="cartao cartao-detalhes">
+            <label>Produto final:</label>
+            {% if producao.produto_esperado %}
+                <p class="detalhes-informacoes">{{ producao.produto_esperado }}</p>
+            {% else %}
+                <p class="detalhes-informacoes">{{ producao.get_insumo_base().nome }}</p>
+            {% endif %}
+            {% if producao.quantidade %}
+            <p class="detalhes-informacoes">Quantidade atual: {{ producao.quantidade_atual_formatada() }}</p>
+            {% endif %}
+            <a class="botao botao-mini azul-claro texto-botao-branco" href="{{ url_for('producao_alterar_produto_final', producao_id=producao.id) }}">Alterar produto final</a>
+        </div>
+        
+        {% if producao.ativa %}
+            <a class="botao azul texto-botao-branco" href="{{ url_for('producao_adicionar_custeio', producao_id=producao.id) }}">Adicionar custeio agrícola</a>
+        {% endif %}
+
+        <!-- {% if producao.get_coletas() %}
             <h2 class="titulo">Coletas realizadas</h2>
             {% for coleta in producao.get_coletas() %}
                 <div class="cartao cartao-detalhes">
@@ -52,7 +67,7 @@
                     <p class="detalhes-informacoes">{{ coleta.quantidade_formatada() }}</p>
                 </div>
             {% endfor %}
-        {% endif %}
+        {% endif %} -->
 
         {% for producaoInsumo in producao.get_insumos_adicionados() %}
             {% if producaoInsumo.get_insumo_relacionado() %}
@@ -85,8 +100,9 @@
             </div>
         </div>
 
-        <a class="botao amarelo texto-botao-cinza" href="{{ url_for('producao_coleta', producao_id=producao.id) }}">Adicionar coleta</a>
-        <a class="botao verde texto-botao-branco" href="{{ url_for('producao_confirmar_finalizar', producao_id=producao.id) }}">Finaizar produção</a>
+        {% if producao.ativa %}
+            <a class="botao verde texto-botao-branco" href="{{ url_for('producao_confirmar_finalizar', producao_id=producao.id) }}">Finalizar produção</a>
+        {% endif %}
 
     {% else %}
         <div class="cartao cartao-detalhes">

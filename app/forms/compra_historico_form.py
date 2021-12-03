@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, SelectField
-from wtforms.validators import DataRequired, Length
-
+from wtforms import StringField
+from datetime import date
 
 class CompraHistoricoForm(FlaskForm):
-    data_inicio = DateField('Data inicial:', format='%d/%m/%Y')
-    data_final = DateField('Data final:', format='%d/%m/%Y')
+    data_inicio = StringField('Data inicial:', default=date.today().strftime('%d/%m/%Y'))
+    data_final = StringField('Data final:')
